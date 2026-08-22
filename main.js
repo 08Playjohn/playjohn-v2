@@ -1,5 +1,5 @@
-// LINK DE TU GOOGLE SHEET (Reemplazá todo lo que está entre comillas por tu enlace .csv de Google)
-const URL_DRIVE_CSV = "AQUÍ_PEGA_EL_ENLACE_CSV_QUE_COPIASTE_EN_EL_PASO_2";
+// LINK DE TU GOOGLE SHEET (Recordá usar el enlace que termina en .csv de "Publicar en la web")
+const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
 // ====== SISTEMA DE CONFIGURACIÓN DE CARRITO ======
 function obtenerCarrito() {
@@ -23,72 +23,93 @@ function agregarAlCarrito(id, nombre, precio) {
     if (productoExistente) {
         productoExistente.cantidad += 1;
     } else {
-        carrito.push({ id, nombre, precio: parseFloat(price), cantidad: 1 });
+        carrito.push({ id: id, nombre: nombre, precio: parseFloat(precio), cantidad: 1 });
     }
     
     localStorage.setItem('carrito_playjohn', JSON.stringify(carrito));
     actualizarGloboCarrito();
-    alert(`¡${nombre} agregado!`);
+    alert(`¡${nombre} agregado al carrito!`);
 }
 
-// ====== LECTOR DINÁMICO DESDE GOOGLE DRIVE ======
+// ====== LECTOR DINÁMICO ADAPTADO A TU DRIVE ======
 async function cargarProductosDesdeDrive() {
     try {
         const respuesta = await fetch(URL_DRIVE_CSV);
         const datosTexto = await respuesta.text();
         
-        // Convertimos las filas del archivo CSV de Drive en un Array de objetos
+        // Dividimos por filas y salteamos la primera (encabezados)
         const filas = datosTexto.split('\n').slice(1); 
         const productos = [];
 
-        filas.forEach(fila => {
-            const columnas = fila.split(',');
-            if (columnas.length >= 6) {
-                const producto = {
-                    id: columnas[0].trim(),
-                    nombre: columnas[1].trim(),
-                    precio: columnas[2].trim(),
-                    categoria: columnas[3].trim().toLowerCase(),
-                    imagen: columnas[4].trim(),
-                    mostrar: columnas[5].trim().toLowerCase()
-                };
-                // Condicionador dinámico: Solo se procesa si pusiste "si"
-                if (producto.mostrar === 'si') {
-                    productos.push(producto);
+        filas.forEach((fila, index) => {
+            // Usamos una expresión regular para separar por comas de forma segura por si hay comas en las descripciones
+            const columnas = fila.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || fila.split(',');
+            
+            // Verificamos que la fila tenga al menos los datos hasta la columna L (mínimo 12 columnas)
+            if (columnas.length >= 12) {
+                
+                // Limpiamos comillas y espacios de los textos extraídos
+                const nombreProd = columnas[0].replace(/"/g, '').trim();
+                const precioProd = columnas[6].replace(/"/g, '').replace(/[^0-9.]/g, '').trim();
+                const subcategoria = columnas[9].replace(/"/g, '').trim().toUpperCase();
+                const visibleWeb = columnas[11].replace(/"/g, '').trim().toLowerCase();
+                
+                // Condicionador dinámico de visibilidad (Columna L)
+                if (visibleWeb === 'si' && nombreProd !== "") {
+                    
+                    // Agrupador inteligente de categorías principales
+                    let categoriaGeneral = '';
+                    const listaConsolas = ['PS2', 'PS3', 'PS4', 'PS5', 'XBOX 360', 'NINTENDO WII'];
+                    const listaComputacion = ['COMPUTACION', 'AURICULARES', 'CABLES', 'MOUSES', 'TECLADOS'];
+
+                    if (listaConsolas.includes(subcategoria)) {
+                        categoriaGeneral = 'consolas';
+                    } else if (listaComputacion.includes(subcategoria)) {
+                        categoriaGeneral = 'computacion';
+                    }
+
+                    productos.push({
+                        id: `prod_${index}`, // Generamos un ID único basado en la fila
+                        nombre: nombreProd,
+                        precio: precioProd ? parseFloat(precioProd) : 0,
+                        subcategoria: subcategoria,
+                        categoriaPrincipal: categoriaGeneral,
+                        imagen: "https://unsplash.com" // Colocá una por defecto por ahora
+                    });
                 }
             }
         });
 
-        window.catalogoGlobal = productos; // Guardamos para el buscador
+        window.catalogoGlobal = productos;
         renderizarProductosEnPantalla(productos);
 
     } catch (error) {
-        console.error("Error al conectar con Google Drive:", error);
+        console.error("Error al conectar con las columnas de Google Drive:", error);
     }
 }
 
-// ====== RENDERIZADOR AUTOMÁTICO DE TARJETAS ======
+// ====== RENDERIZADOR AUTOMÁTICO EN LAS GRILLAS ======
 function renderizarProductosEnPantalla(productos) {
     const contenedorGrid = document.querySelector('.products-grid');
-    if (!contenedorGrid) return; // Si no estamos en una página de grilla, frena.
+    if (!contenedorGrid) return; 
 
-    // Detectamos en qué página está parado el usuario (computacion o consolas)
-    const paginaActual = window.location.pathname.includes('computacion') ? 'computacion' : 'consolas';
+    // Detectamos en qué página web está parado el usuario actualmente
+    const esPaginaComputacion = window.location.pathname.includes('computacion');
+    const seccionObjetivo = esPaginaComputacion ? 'computacion' : 'consolas';
     
-    // Filtramos los productos que corresponden estrictamente a esta sección
-    const productosFiltrados = productos.filter(p => p.categoria === paginaActual);
+    // Filtramos los artículos que correspondan a esta sección del sitio
+    const productosFiltrados = productos.filter(p => p.categoriaPrincipal === seccionObjetivo);
     
-    // Limpiamos las tarjetas estáticas anteriores
     contenedorGrid.innerHTML = '';
 
     if (productosFiltrados.length === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center;">No hay novedades disponibles en este momento.</p>`;
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px;">No hay productos disponibles para mostrar en esta sección.</p>`;
         return;
     }
 
-    // Armamos las tarjetas dinámicas una por una
+    // Inyectamos las tarjetas de forma dinámica
     productosFiltrados.forEach(p => {
-        const precioFormateado = parseFloat(p.precio).toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+        const precioFormateado = p.precio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
         
         const tarjetaHTML = `
             <div class="product-card">
@@ -96,6 +117,7 @@ function renderizarProductosEnPantalla(productos) {
                     <img src="${p.imagen}" alt="${p.nombre}">
                 </div>
                 <div class="product-info">
+                    <span style="font-size: 10px; color: #8c00ff; font-weight: bold; text-transform: uppercase;">${p.subcategoria}</span>
                     <h3>${p.nombre}</h3>
                     <p class="product-price">${precioFormateado}</p>
                     <button class="add-to-cart-btn" onclick="agregarAlCarrito('${p.id}', '${p.nombre}', ${p.precio})">Agregar al Carrito 🛒</button>
@@ -106,7 +128,7 @@ function renderizarProductosEnPantalla(productos) {
     });
 }
 
-// ====== BUSCADOR ASINCRÓNICO ======
+// ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
     const searchButtons = document.querySelectorAll('.search-btn');
@@ -117,10 +139,10 @@ function inicializarBuscadorGlobal() {
 
         const encontrado = window.catalogoGlobal.find(p => p.nombre.toLowerCase().includes(busqueda));
 
-        if (encontrado) {
-            window.location.href = `${encontrado.categoria}.html`;
+        if (encontrado && encontrado.categoriaPrincipal !== '') {
+            window.location.href = `${encontrado.categoriaPrincipal}.html`;
         } else {
-            alert('No encontramos novedades con ese nombre.');
+            alert('No se encontraron productos activos con ese nombre.');
         }
     }
 
@@ -132,7 +154,7 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// Disparador de carga al abrir la web
+// Carga inicial
 document.addEventListener('DOMContentLoaded', () => {
     actualizarGloboCarrito();
     cargarProductosDesdeDrive();
