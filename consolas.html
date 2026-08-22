@@ -1,1 +1,102 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 Play John - Computación</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR DE MARCAS -->
+    <div class="top-bar">
+        <div class="top-bar-brands">
+            <span>INTEL</span> | <span>AMD</span> | <span>NVIDIA</span> | <span>ASUS</span> | <span>MSI</span>
+        </div>
+        <div class="top-bar-contact">
+            <span><a href="index.html" style="color: #00bcff;">🏠 VOLVER AL INICIO</a></span>
+        </div>
+    </div>
+
+    <!-- MENÚ PRINCIPAL -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <a href="index.html" class="logo-text">08 PLAY JOHN</a>
+            </div>
+            <div class="search-area">
+                <input type="text" placeholder="Buscar en 08 Play John...">
+                <button type="submit" class="search-btn">🔍</button>
+            </div>
+            <div class="right-actions">
+                <div class="social-block">
+                    <div class="social-title">Nuestras<br>Redes</div>
+                    <a href="https://wa.me" target="_blank" class="social-icon">💬</a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon">📸</a>
+                </div>
+                <div class="user-cart-block">
+                    <a href="#" class="action-link">👤</a>
+                    <a href="#" class="action-link">🛒<span class="cart-badge">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+        <!-- SECCIÓN DE PRODUCTOS CONSOLAS -->
+    <main class="products-section">
+        <h2 class="section-title">Consolas y Videojuegos</h2>
+        <div class="products-grid">
+            
+            <!-- Producto 1 -->
+            <div class="product-card">
+                <div class="product-img-box">
+                    <img src="https://unsplash.com" alt="PS5 Slim">
+                </div>
+                <div class="product-info">
+                    <h3>Consola PlayStation 5 Slim</h3>
+                    <p class="product-price">$1.200.000</p>
+                    <button class="add-to-cart-btn" onclick="agregarAlCarrito('v1', 'Consola PlayStation 5 Slim', 1200000)">Agregar al Carrito 🛒</button>
+                </div>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="product-card">
+                <div class="product-img-box">
+                    <img src="https://unsplash.com" alt="Joystick Xbox">
+                </div>
+                <div class="product-info">
+                    <h3>Joystick Xbox Wireless</h3>
+                    <p class="product-price">$95.000</p>
+                    <button class="add-to-cart-btn" onclick="agregarAlCarrito('v2', 'Joystick Xbox Wireless', 95000)">Agregar al Carrito 🛒</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- FOOTER ORIGINAL -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <h3>© 2026 PLAY JOHN</h3>
+                <p>Servicio técnico especializado y venta de hardware gamer. Todos los derechos reservados. Las marcas mencionadas (PlayStation, Xbox, Nintendo) son propiedad de sus respectivos dueños.</p>
+            </div>
+            <div class="footer-col terms-col">
+                <h3>TÉRMINOS Y CONDICIONES</h3>
+                <p>⚠️ <strong>Precios:</strong> Los valores expresados en la web están sujetos a modificaciones sin previo aviso debido a la fluctuación del mercado.</p>
+                <p>🛒 <strong>Confirmación:</strong> El pedido enviado por WhatsApp no representa una reserva automática.</p>
+            </div>
+            <div class="footer-col warranty-col">
+                <h3>POLÍTICAS DE GARANTÍA</h3>
+                <p>🔧 <strong>Servicio Técnico:</strong> Las reparaciones cuentan con una garantía escrita de 1 mes.</p>
+                <p>📦 <strong>Productos Nuevos:</strong> Cambio directo por falla de fábrica dentro de los 3 días de corrido.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
