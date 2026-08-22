@@ -116,15 +116,19 @@ a {
     padding-right: 20px;
 }
 
+/* Obligamos a que las imágenes del menú superior sean visibles */
 .social-icon img {
-    width: 20px; /* Tamaño perfecto y simétrico en el menú */
-    height: 20px;
-    transition: transform 0.2s ease;
-    display: block;
+    width: 24px !important;  
+    height: 24px !important;
+    display: inline-block !important;
+    visibility: visible !important;
 }
 
-.social-icon img:hover {
-    transform: scale(1.15); /* Efecto sutil al pasar el mouse */
+/* Ajuste del contenedor de redes */
+.social-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* Corrección del círculo del Botón Flotante de WhatsApp */
