@@ -88,16 +88,14 @@ async function cargarProductosDesdeDrive() {
     }
 }
 
-// ====== RENDERIZADOR AUTOMÁTICO EN LAS GRILLAS ======
+// ====== RENDERIZADOR AUTOMÁTICO CON FORMATO PREMIUM SIN CUOTAS ======
 function renderizarProductosEnPantalla(productos) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
 
-    // Detectamos en qué página web está parado el usuario actualmente
     const esPaginaComputacion = window.location.pathname.includes('computacion');
     const seccionObjetivo = esPaginaComputacion ? 'computacion' : 'consolas';
     
-    // Filtramos los artículos que correspondan a esta sección del sitio
     const productosFiltrados = productos.filter(p => p.categoriaPrincipal === seccionObjetivo);
     
     contenedorGrid.innerHTML = '';
@@ -107,27 +105,31 @@ function renderizarProductosEnPantalla(productos) {
         return;
     }
 
-    // Inyectamos las tarjetas de forma dinámica
     productosFiltrados.forEach(p => {
+        // Formateo de precio total en pesos argentinos
         const precioFormateado = p.precio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
         
+        // Traemos el campo descripción mapeado desde la Columna H de tu Drive
+        const descripcionProd = p.descripcion ? p.descripcion : "Sin descripción disponible.";
+
         const tarjetaHTML = `
             <div class="product-card">
                 <div class="product-img-box">
                     <img src="${p.imagen}" alt="${p.nombre}">
                 </div>
                 <div class="product-info">
-                    <span style="font-size: 10px; color: #8c00ff; font-weight: bold; text-transform: uppercase;">${p.subcategoria}</span>
                     <h3>${p.nombre}</h3>
+                    <p class="product-description">${descripcionProd}</p>
                     <p class="product-price">${precioFormateado}</p>
-                    <button class="add-to-cart-btn" onclick="agregarAlCarrito('${p.id}', '${p.nombre}', ${p.precio})">Agregar al Carrito 🛒</button>
+                    <button class="add-to-cart-btn" onclick="agregarAlCarrito('${p.id}', '${p.nombre}', ${p.precio})">
+                        🛒 AGREGAR
+                    </button>
                 </div>
             </div>
         `;
         contenedorGrid.innerHTML += tarjetaHTML;
     });
 }
-
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
