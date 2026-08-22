@@ -10,29 +10,58 @@
 </head>
 <body>
 
-    <!-- 1. BARRA SUPERIOR (HEADER) -->
+  <body>
+
+    <!-- BARRA SUPERIOR DE MARCAS Y CONTACTO -->
+    <div class="top-bar">
+        <div class="top-bar-brands">
+            <span>INTEL</span> | <span>AMD</span> | <span>NVIDIA</span> | <span>ASUS</span> | <span>MSI</span>
+        </div>
+        <div class="top-bar-contact">
+            <span>🛠️ Soporte Técnico Especializado</span>
+        </div>
+    </div>
+
+    <!-- MENÚ PRINCIPAL CON BUSCADOR, REDES Y ACCESOS -->
     <header class="main-header">
         <div class="header-container">
-            <!-- Logo principal del sitio -->
+            
+            <!-- Logo -->
             <div class="logo-area">
                 <a href="#" class="logo-text">08 PLAY JOHN</a>
             </div>
 
-            <!-- Buscador centralizado para encontrar marcas o productos -->
+            <!-- Buscador -->
             <div class="search-area">
                 <input type="text" placeholder="Buscar en 08 Play John...">
                 <button type="submit" class="search-btn">🔍</button>
             </div>
 
-            <!-- Acceso al Carrito de compras -->
-            <div class="cart-area">
-                <a href="#" class="cart-link">
-                    <span class="cart-icon">🛒</span>
-                    <span class="cart-text">Carrito</span>
-                </a>
+            <!-- Redes Recuadradas + Usuario + Carrito -->
+            <div class="right-actions">
+                
+                <!-- Bloque Redes Sociales (Exactamente las que pediste) -->
+                <div class="social-block">
+                    <div class="social-title">Nuestras<br>Redes</div>
+                    <a href="https://wa.me" target="_blank" class="social-icon">💬</a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon">📸</a>
+                </div>
+
+                <!-- Bloque accesos usuario y carrito -->
+                <div class="user-cart-block">
+                    <!-- Iniciar sesión -->
+                    <a href="#" class="action-link" title="Mi Cuenta">👤</a>
+                    
+                    <!-- Carrito con indicador de producto -->
+                    <a href="#" class="action-link" title="Carrito">
+                        🛒<span class="cart-badge">1</span>
+                    </a>
+                </div>
+
             </div>
         </div>
     </header>
+
 
     <!-- 2. SECCIÓN PRINCIPAL: CARRUSEL DE IMÁGENES / PUBLICIDAD -->
     <main class="hero-carousel">
