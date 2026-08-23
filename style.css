@@ -61,8 +61,8 @@ body {
     color: #e50914 !important; /* Rojo gamer para todo el texto */
     font-weight: bold;
     text-decoration: none;
+    font-size: 22px;
 }
-
 
 .search-area {
     flex: 1;
@@ -99,12 +99,12 @@ body {
 }
 
 /* ==========================================
-   BLOQUE DE REDES (EL ERROR ESTABA ACÁ)
+   BLOQUE DE REDES (UNIFICADO Y CORREGIDO)
    ========================================== */
 .social-block {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     border-right: 1px solid #333;
     padding-right: 15px;
 }
@@ -118,18 +118,24 @@ body {
     font-weight: 600;
 }
 
-/* Forzamos al navegador a darle tamaño real a las imágenes */
+/* Estilos unificados para los enlaces/iconos de redes sociales */
 .social-icon {
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1); /* Efecto sutil al pasar el mouse */
 }
 
 .social-icon img {
-    width: 24px !important;
-    height: 24px !important;
+    width: 32px !important;
+    height: 32px !important;
     display: block !important;
     object-fit: contain;
+    border: none;
 }
 
 .user-cart-block {
@@ -256,26 +262,4 @@ body {
     color: #aaa;
     line-height: 1.5;
 }
-/* Quita los bordes feos de los botones de JS y los alinea */
-.social-block {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
-.social-btn-js {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: inline-block;
-    transition: transform 0.2s ease;
-}
-
-.social-btn-js:hover {
-    transform: scale(1.1); /* Efecto sutil al pasar el mouse */
-}
-
-.social-btn-js img {
-    display: block;
-}
