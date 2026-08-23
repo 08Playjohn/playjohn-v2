@@ -65,21 +65,24 @@
         </div>
     </header>
 
-    <!-- 3. SECCIÓN PRINCIPAL: CARRUSEL DE PUBLICIDAD / NOVEDADES -->
+        <!-- 3. SECCIÓN PRINCIPAL: CARRUSEL DE PUBLICIDAD / NOVEDADES -->
     <main class="hero-carousel">
         <div class="carousel-container">
             <!-- Flecha Izquierda -->
-            <button class="carousel-arrow prev-arrow">❮</button>
+            <button type="button" class="carousel-arrow prev-arrow" onclick="cambiarSlide(-1)">❮</button>
             
-            <!-- Zona de la Imagen Activa -->
+            <!-- Zona de las Imágenes (Agrega aquí tus banners con tamaño 1920x500) -->
             <div class="carousel-slide">
-                <img src="ladrillos-neon.jpg" alt="Publicidad destacada 08 Play John" class="carousel-img">
+                <img src="imagenes/servicio.jpg" alt="Publicidad destacada 08 Play John" class="carousel-img">
+                <img src="imagenes/servicio2.jpg" alt="Hardware y Periféricos" class="carousel-img" style="display: none;">
+                
             </div>
             
             <!-- Flecha Derecha -->
-            <button class="carousel-arrow next-arrow">❯</button>
+            <button type="button" class="carousel-arrow next-arrow" onclick="cambiarSlide(1)">❯</button>
         </div>
     </main>
+
         <!-- SECCIÓN DE PRODUCTOS CON FILTRADO INCORPORADO -->
     <section class="products-section">
         
