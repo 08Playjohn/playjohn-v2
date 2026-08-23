@@ -8,8 +8,8 @@ function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // CORRECCIÓN: Usamos el formato oficial wa.me/ que nunca falla
-    const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
+    // CONCATENACIÓN CLÁSICA IMPENETRABLE (Sin comillas invertidas ni llaves que se rompan)
+    const urlFinal = "https://wa.me" + telefono + "?text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
@@ -18,21 +18,21 @@ function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero coordinar la compra de los siguientes productos:\n\n";
+    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero realizar el siguiente pedido:\n\n";
     let total = 0;
 
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
-        mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
+        mensaje += "• *" + item.nombre + "* (x" + item.cantidad + ") - " + subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n";
     });
 
-    mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
+    mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
     const telefono = "5491141701483";
-    // CORRECCIÓN: También aseguramos el formato acá para el despacho del carrito
-    const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
+    // CONCATENACIÓN CLÁSICA ACÁ TAMBIÉN
+    const urlFinal = "https://wa.me" + telefono + "?text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
