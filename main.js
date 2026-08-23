@@ -251,6 +251,43 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
+    iniciarRotacionAutomatica();
 });
+// ==========================================
+// 5. CONTROL DINÁMICO DEL CARRUSEL DE BANNERS
+// ==========================================
+let indiceSlideActual = 0;
+let intervaloCarrusel;
+
+function mostrarSlide(indice) {
+    const imagenes = document.querySelectorAll('.carousel-slide .carousel-img');
+    if (imagenes.length === 0) return;
+
+    // Manejo de bucle si se pasa del límite izquierdo o derecho
+    if (indice >= imagenes.length) { indiceSlideActual = 0; }
+    else if (indice < 0) { indiceSlideActual = imagenes.length - 1; }
+    else { indiceSlideActual = indice; }
+
+    // Ocultamos todas las imágenes y solo mostramos la activa
+    imagenes.forEach(img => img.style.display = 'none');
+    imagenes[indiceSlideActual].style.display = 'block';
+}
+
+function cambiarSlide(direccion) {
+    // Al hacer clic manual, reiniciamos el temporizador automático para que no salte rápido
+    clearInterval(intervaloCarrusel);
+    mostrarSlide(indiceSlideActual + direccion);
+    iniciarRotacionAutomatica();
+}
+
+function iniciarRotacionAutomatica() {
+    intervaloCarrusel = setInterval(() => {
+        mostrarSlide(indiceSlideActual + 1);
+    }, 4000); // Cambia de propaganda automáticamente cada 4 segundos
+}
+
+// Modificamos el inicializador DOMContentLoaded que ya tenés en tu main.js 
+// para que encienda el carrusel apenas cargue la web agregando:
+// iniciarRotacionAutomatica(); justo antes del cierre de la función.
 
 
