@@ -1,20 +1,6 @@
 // ==========================================
 // 1. CONFIGURACIÓN DE REDES SOCIALES
 // ==========================================
-// ==========================================
-// 1. CONFIGURACIÓN DE REDES SOCIALES
-// ==========================================
-function abrirWppPlayJohn() {
-    const telefono = "5491141701483";
-    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    
-    // CONCATENACIÓN CLÁSICA IMPENETRABLE (Sin comillas invertidas ni llaves que se rompan)
-    const urlFinal = "https://wa.me" + telefono + "?text=" + encodeURIComponent(mensaje);
-    window.open(urlFinal, "_blank");
-}
-// ==========================================
-// 1. CONFIGURACIÓN DE REDES SOCIALES
-// ==========================================
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
@@ -137,28 +123,7 @@ function renderizarItemsCarrito() {
 // ==========================================
 // 3. FUNCIÓN ÚNICA DE ENVÍO DE PEDIDO
 // ==========================================
-// ==========================================
-// 3. FUNCIÓN ÚNICA DE ENVÍO DE PEDIDO (TEXTO PLANO SANADO)
-// ==========================================
-function enviarPedidoWhatsApp() {
-    const carrito = obtenerCarrito();
-    if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    // Usamos solo letras y saltos de línea comunes (\n)
-    let mensaje = "NUEVO PEDIDO - 08 PLAY JOHN\n\nHola! Quiero realizar el siguiente pedido:\n\n";
-    let total = 0;
-
-    carrito.forEach(item => {
-        const subtotal = item.precio * item.cantidad;
-        total += subtotal;
-        // Texto plano sin asteriscos ni viñetas raras
-        mensaje += " - " + item.nombre + " (Cantidad: " + item.cantidad + ") - Subtotal: $" + subtotal.toLocaleString('es-AR') + "\n";
-    });
-
-    mensaje += "\nTotal del Pedido: $" + total.toLocaleString('es-AR') + "\n\n";
-    mensaje += "Tienen disponibilidad de stock para confirmar el pago?";
-
-    const telefono = "5491141701483";
   // ==========================================
 // 3. FUNCIÓN DE ENVÍO ESTÁTICA Y DIRECTA
 // ==========================================
