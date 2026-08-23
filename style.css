@@ -57,13 +57,12 @@ body {
     gap: 20px;
 }
 
-.logo-area .logo-text {
-    color: #ffffff;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+.logo-text {
+    color: #e50914 !important; /* Rojo gamer para todo el texto */
+    font-weight: bold;
     text-decoration: none;
 }
+
 
 .search-area {
     flex: 1;
