@@ -159,10 +159,14 @@ function enviarPedidoWhatsApp() {
     mensaje += "Tienen disponibilidad de stock para confirmar el pago?";
 
     const telefono = "5491141701483";
-    
-    // API Directa uniendo las variables con texto limpio
-    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
-    window.open(urlFinal, "_blank");
+  // ==========================================
+// 3. FUNCIÓN DE ENVÍO ESTÁTICA Y DIRECTA
+// ==========================================
+function enviarPedidoWhatsApp() { 
+    // Te abre directo tu enlace seguro en una pestaña nueva sin dar vueltas
+    window.open("https://api.whatsapp.com/send?phone=541141701483", "_blank");
+}
+
 }
 
 // ==========================================
