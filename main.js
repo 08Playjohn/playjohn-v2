@@ -123,16 +123,29 @@ function renderizarItemsCarrito() {
 // ==========================================
 // 3. FUNCIÓN ÚNICA DE ENVÍO DE PEDIDO
 // ==========================================
+function enviarPedidoWhatsApp() {
+    const carrito = obtenerCarrito();
+    if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-  // ==========================================
-// 3. FUNCIÓN DE ENVÍO ESTÁTICA Y DIRECTA
-// ==========================================
-function enviarPedidoWhatsApp() { 
-    // Te abre directo tu enlace seguro en una pestaña nueva sin dar vueltas
-    window.open("https://api.whatsapp.com/send?phone=541141701483", "_blank");
+    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero realizar el siguiente pedido:\n\n";
+    let total = 0;
+
+    carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        mensaje += "• *" + item.nombre + "* (x" + item.cantidad + ") - " + subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n";
+    });
+
+    mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
+    mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
+
+    const telefono = "5491141701483";
+    
+    // ESTA ES LA URL LIMPIA QUE DEBE QUEDAR
+    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    window.open(urlFinal, "_blank");
 }
 
-}
 
 // ==========================================
 // 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
