@@ -34,10 +34,11 @@ function enviarPedidoWhatsApp() {
 }
 
 function abrirIgPlayJohn() {
-    const usuarioIg = "08playjohn";
+    const usuarioIg = "@08playjohn";
     // Agregamos la barra '/' después de instagram.com
     const urlIg = "https://instagram.com" + usuarioIg + "/"; 
     window.open(urlIg, "_blank");
+   
 }
 
 
