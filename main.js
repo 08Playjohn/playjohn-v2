@@ -1,26 +1,17 @@
 // ====== CONFIGURACIÓN DE REDES SOCIALES (08 PLAY JOHN) ======
 
-// 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    
-    // API oficial estructurada de forma perfecta
     const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
-    
     window.open(urlWpp, "_blank");
 }
 
-// 2. FUNCIÓN PARA ABRIR EL INSTAGRAM DIRECTO DE PLAY JOHN
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    
-    // Corregido: Aseguramos la barra '/' fija después de .com
-    const urlIg = "https://instagram.com" + usuarioIg + "/";
-    
+    const urlIg = "https://www.instagram.com/" + usuarioIg + "/";
     window.open(urlIg, "_blank");
 }
-
 
 // ====== SISTEMA DE CONFIGURACIÓN DE CARRITO ======
 function obtenerCarrito() {
@@ -52,9 +43,8 @@ function agregarAlCarrito(id, nombre, precio) {
     alert(`¡${nombre} agregado al carrito!`);
 }
 
-
-// ====== LECTOR DINÁMICO ADAPTADO A TU DRIVE ======
-const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+// ====== LECTOR DINÁMICO REESTRUCTURADO (COLUMNAS EXACTAS) ======
+const URL_DRIVE_CSV = "https://google.com";
 
 async function cargarProductosDesdeDrive() {
     try {
@@ -65,22 +55,29 @@ async function cargarProductosDesdeDrive() {
         const productos = [];
 
         filas.forEach((fila, index) => {
+            // Regex seguro para separar celdas por comas sin romper descripciones largas
             const columnas = fila.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || fila.split(',');
             
-            if (columnas.length >= 12) {
+            // Verificamos que la fila contenga al menos hasta la columna K (mínimo 11 columnas)
+            if (columnas && columnas.length >= 11) {
+                
+                // Mapeo Dinámico según tus especificaciones
                 const nombreProd = columnas[0].replace(/"/g, '').trim();
                 const precioProd = columnas[6].replace(/"/g, '').replace(/[^0-9.]/g, '').trim();
-                const subcategoria = columnas[9].replace(/"/g, '').trim().toUpperCase();
-                const visibleWeb = columnas[11].replace(/"/g, '').trim().toLowerCase();
+                const descripcionProd = columnas[7].replace(/"/g, '').trim();
+                const categoriaExcel = columnas[8].replace(/"/g, '').trim().toUpperCase();
+                const imagenProd = columnas[9].replace(/"/g, '').trim();
+                const visibleWeb = columnas[10].replace(/"/g, '').trim().toLowerCase();
                 
+                // Filtro dinámico: Solo se procesa si columna K es 'si' y tiene nombre válido
                 if (visibleWeb === 'si' && nombreProd !== "") {
                     let categoriaGeneral = '';
-                    const listaConsolas = ['PS2', 'PS3', 'PS4', 'PS5', 'XBOX 360', 'NINTENDO WII'];
+                    const listaConsolas = ['PS2', 'PS3', 'PS4', 'PS5', 'XBOX 360', 'NINTENDO WII', 'CONSOLAS'];
                     const listaComputacion = ['COMPUTACION', 'AURICULARES', 'CABLES', 'MOUSES', 'TECLADOS'];
 
-                    if (listaConsolas.includes(subcategoria)) {
+                    if (listaConsolas.includes(categoriaExcel)) {
                         categoriaGeneral = 'consolas';
-                    } else if (listaComputacion.includes(subcategoria)) {
+                    } else if (listaComputacion.includes(categoriaExcel)) {
                         categoriaGeneral = 'computacion';
                     }
 
@@ -88,9 +85,9 @@ async function cargarProductosDesdeDrive() {
                         id: `prod_${index}`,
                         nombre: nombreProd,
                         precio: precioProd ? parseFloat(precioProd) : 0,
-                        subcategoria: subcategoria,
+                        descripcion: descripcionProd ? descripcionProd : "Sin descripción disponible.",
                         categoriaPrincipal: categoriaGeneral,
-                        imagen: "https://unsplash.com" // Imagen gaming por defecto provisional
+                        imagen: imagenProd ? imagenProd : "https://unsplash.com"
                     });
                 }
             }
@@ -104,8 +101,7 @@ async function cargarProductosDesdeDrive() {
     }
 }
 
-
-// ====== RENDERIZADOR AUTOMÁTICO CON FORMATO PREMIUM SIN CUOTAS ======
+// ====== RENDERIZADOR DIRECTO SIN IMPUESTOS NI CUOTAS ======
 function renderizarProductosEnPantalla(productos) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
@@ -118,25 +114,25 @@ function renderizarProductosEnPantalla(productos) {
     contenedorGrid.innerHTML = '';
 
     if (productosFiltrados.length === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px;">No hay productos disponibles para mostrar en esta sección.</p>`;
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px;">No hay productos disponibles activos en este momento.</p>`;
         return;
     }
 
     productosFiltrados.forEach(p => {
         const precioFormateado = p.precio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
-        const descripcionProd = p.descripcion ? p.descripcion : "Sin descripción disponible.";
 
+        // Estructura limpia solicitada: Imagen, Título, Descripción, Precio Neto y Botón Único de Compra
         const tarjetaHTML = `
             <div class="product-card">
                 <div class="product-img-box">
-                    <img src="${p.imagen}" alt="${p.nombre}">
+                    <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://unsplash.com'">
                 </div>
                 <div class="product-info">
                     <h3>${p.nombre}</h3>
-                    <p class="product-description">${descripcionProd}</p>
+                    <p class="product-description">${p.descripcion}</p>
                     <p class="product-price">${precioFormateado}</p>
                     <button class="add-to-cart-btn" onclick="agregarAlCarrito('${p.id}', '${p.nombre}', ${p.precio})">
-                        🛒 AGREGAR
+                        🛒 COMPRAR
                     </button>
                 </div>
             </div>
@@ -144,7 +140,6 @@ function renderizarProductosEnPantalla(productos) {
         contenedorGrid.innerHTML += tarjetaHTML;
     });
 }
-
 
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
@@ -172,12 +167,10 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-
-// ====== INICIALIZADOR GLOBAL AL CARGAR LA PÁGINA ======
+// Inicializador General al Cargar el sitio
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Sistema de 08 Play John inicializado correctamente.");
+    console.log("Catálogo automatizado de 08 Play John listo.");
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
 });
-
