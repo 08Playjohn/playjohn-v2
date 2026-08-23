@@ -690,33 +690,58 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
     display: block;
 }
 /* ==========================================
-   AJUSTE DEL LOGO EN LA CABECERA
+   LOGO FLOTANTE PREMIUM (NO AGRANDA EL MÓDULO)
    ========================================== */
-/* ==========================================
-   AJUSTE DE TAMAÑO MAXI PARA EL LOGO
-   ========================================== */
-/* ==========================================
-   TAMAÑO GIGANTE PARA EL LOGO (EL DOBLE)
-   ========================================== */
+.main-header {
+    background-color: #0b0b0c;
+    /* Reducimos el relleno para que la barra quede bien fina y compacta */
+    padding: 8px 4% !important; 
+    border-bottom: 2px solid #8c00ff;
+    width: 100%;
+    position: relative; /* Clave para el truco del logo */
+}
+
 .logo-brand-box {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    max-width: 450px; /* Espacio de sobra de forma horizontal */
-    transition: transform 0.2s ease;
+    max-width: 320px;
+    
+    /* TRUCO DE FLOTACIÓN: Sacamos el logo del flujo normal para que 
+       pueda ser gigante sin empujar los bordes de la barra morada */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
 }
 
 .logo-brand-box:hover {
-    transform: scale(1.05); 
+    /* Mantenemos el centrado vertical y le sumamos un sutil efecto hover */
+    transform: translateY(-50%) scale(1.05); 
 }
 
 .header-logo-img {
-    width: auto; /* Dejamos que el ancho se calcule solo de forma perfecta */
-    height: 140px !important; /* Forzamos la altura al doble para que se note el cambio */
-    object-fit: contain; 
+    width: auto;
+    /* Mantenemos el tamaño gigante que querías (130px) pero ahora flota libremente */
+    height: 130px !important; 
+    object-fit: contain;
     display: block;
-    padding: 10px 0; /* Más espacio para que no toque los bordes morados */
+    
+    /* El filtro drop-shadow hace que el logo se despegue del fondo y resalte */
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
 }
+
+/* Ajustamos el contenedor fijo de la cabecera para que no quede tanto espacio en el body */
+body {
+    padding-top: 150px !important; /* Achicado de 240px a 150px porque la barra ahora es súper fina */
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 190px !important;
+    }
+}
+
 /* ==========================================
    BLOQUEO Y FIJACIÓN DE CABECERA (STICKY HEADER)
    ========================================== */
