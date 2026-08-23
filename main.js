@@ -1,6 +1,5 @@
 // ====== CONFIGURACIÓN DE REDES SOCIALES (08 PLAY JOHN) ======
 
-// Función para abrir el WhatsApp de forma segura
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
@@ -8,7 +7,6 @@ function abrirWppPlayJohn() {
     window.open(urlWpp, "_blank");
 }
 
-// Función para abrir el Instagram de forma segura
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
     const urlIg = "https://instagram.com" + usuarioIg + "/";
@@ -46,7 +44,7 @@ function agregarAlCarrito(id, nombre, precio) {
 }
 
 // ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
-const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+const URL_DRIVE_JSON = "https://google.com";
 
 async function cargarProductosDesdeDrive() {
     try {
@@ -55,10 +53,7 @@ async function cargarProductosDesdeDrive() {
         const productosLista = await respuesta.json();
         
         console.log("Conexión exitosa. Datos recibidos:", productosLista);
-        
-        // Enviamos el listado directamente al renderizador de pantalla
         renderizarProductosEnPantalla(productosLista);
-
     } catch (error) {
         console.error("Error crítico al leer datos desde Google Drive:", error);
     }
@@ -81,23 +76,17 @@ function renderizarProductosEnPantalla(productos) {
         let esDeConsolas = listaConsolas.includes(catFormateada);
         
         if ((esPaginaComputacion && !esDeConsolas) || (!esPaginaComputacion && esDeConsolas)) {
-            
             const prodId = producto.id ? producto.id : `drive_${index}`;
             const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
-            // Formateo de precio limpio sin centavos
             const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
             const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
             const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
 
-            // NUEVA ESTRUCTURA DIVIDIDA: Caja superior blanca + Bloque inferior oscuro
             const tarjetaHTML = `
                 <div class="product-card">
-                    <!-- Bloque Superior Blanco para la foto -->
                     <div class="product-img-box">
                         <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
                     </div>
-                    
-                    <!-- Bloque Inferior Oscuro para la Información -->
                     <div class="product-info-block">
                         <h3 class="product-title">${producto.nombre}</h3>
                         <p class="product-description">${descripcionProd}</p>
@@ -118,12 +107,6 @@ function renderizarProductosEnPantalla(productos) {
     }
 }
 
-    // Si la sección queda vacía colocamos un mensaje decorativo gamer
-    if (productosDibujados === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles en esta sección por el momento.</p>`;
-    }
-}
-
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
@@ -132,7 +115,6 @@ function inicializarBuscadorGlobal() {
     function ejecutarBusqueda(texto) {
         const busqueda = texto.trim().toLowerCase();
         if (busqueda === '') return;
-
         alert('Buscando "' + texto + '" en el catálogo de 08 Play John...');
     }
 
