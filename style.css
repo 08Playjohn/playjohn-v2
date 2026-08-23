@@ -652,3 +652,32 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 .checkout-btn:hover {
     background-color: #1ebd56;
 }
+/* ==========================================
+   BOTÓN FLOTANTE DE WHATSAPP (ESQUINA INFERIOR)
+   ========================================== */
+.wpp-floating-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px; /* Fijado perfectamente en el borde inferior derecho */
+    background-color: #25d366 !important;
+    border: none !important;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    z-index: 9999; /* Asegura que flote por encima de las tarjetas y el footer */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wpp-floating-btn:hover {
+    transform: scale(1.1); /* Efecto de agrandamiento sutil */
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.6); /* Brillo verde gamer */
+}
+
+.wpp-floating-btn svg {
+    display: block;
+}
