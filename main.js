@@ -155,7 +155,7 @@ function enviarPedidoWhatsApp() {
 
     const telefono = "5491141701483";
     
-    // API OFICIAL SANADA: Sin errores de caracteres ni duplicados
+    // ESTA ES LA URL LIMPIA QUE DEBE QUEDAR
     const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
