@@ -1,5 +1,23 @@
-// LINK DE TU GOOGLE SHEET (Recordá usar el enlace que termina en .csv de "Publicar en la web")
-const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+// ====== CONFIGURACIÓN DE RUTAS DE REDES SOCIALES (08 PLAY JOHN) ======
+
+// 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
+function abrirWppPlayJohn() {
+    const telefono = "5491141701483";
+    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
+    
+    // Usamos la API oficial y estructuramos correctamente los parámetros de la URL
+    const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    
+    window.open(urlWpp, "_blank");
+}
+
+// 2. FUNCIÓN PARA ABRIR EL INSTAGRAM DIRECTO DE PLAY JOHN
+function abrirIgPlayJohn() {
+    const usuarioIg = "08playjohn";
+    const urlIg = "https://instagram.com" + usuarioIg + "/";
+    
+    window.open(urlIg, "_blank");
+}
 
 // ====== SISTEMA DE CONFIGURACIÓN DE CARRITO ======
 function obtenerCarrito() {
@@ -32,32 +50,26 @@ function agregarAlCarrito(id, nombre, precio) {
 }
 
 // ====== LECTOR DINÁMICO ADAPTADO A TU DRIVE ======
+const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+
 async function cargarProductosDesdeDrive() {
     try {
         const respuesta = await fetch(URL_DRIVE_CSV);
         const datosTexto = await respuesta.text();
         
-        // Dividimos por filas y salteamos la primera (encabezados)
         const filas = datosTexto.split('\n').slice(1); 
         const productos = [];
 
         filas.forEach((fila, index) => {
-            // Usamos una expresión regular para separar por comas de forma segura por si hay comas en las descripciones
             const columnas = fila.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || fila.split(',');
             
-            // Verificamos que la fila tenga al menos los datos hasta la columna L (mínimo 12 columnas)
             if (columnas.length >= 12) {
-                
-                // Limpiamos comillas y espacios de los textos extraídos
                 const nombreProd = columnas[0].replace(/"/g, '').trim();
                 const precioProd = columnas[6].replace(/"/g, '').replace(/[^0-9.]/g, '').trim();
                 const subcategoria = columnas[9].replace(/"/g, '').trim().toUpperCase();
                 const visibleWeb = columnas[11].replace(/"/g, '').trim().toLowerCase();
                 
-                // Condicionador dinámico de visibilidad (Columna L)
                 if (visibleWeb === 'si' && nombreProd !== "") {
-                    
-                    // Agrupador inteligente de categorías principales
                     let categoriaGeneral = '';
                     const listaConsolas = ['PS2', 'PS3', 'PS4', 'PS5', 'XBOX 360', 'NINTENDO WII'];
                     const listaComputacion = ['COMPUTACION', 'AURICULARES', 'CABLES', 'MOUSES', 'TECLADOS'];
@@ -69,12 +81,12 @@ async function cargarProductosDesdeDrive() {
                     }
 
                     productos.push({
-                        id: `prod_${index}`, // Generamos un ID único basado en la fila
+                        id: `prod_${index}`,
                         nombre: nombreProd,
                         precio: precioProd ? parseFloat(precioProd) : 0,
                         subcategoria: subcategoria,
                         categoriaPrincipal: categoriaGeneral,
-                        imagen: "https://unsplash.com" // Colocá una por defecto por ahora
+                        imagen: "https://unsplash.com"
                     });
                 }
             }
@@ -106,10 +118,7 @@ function renderizarProductosEnPantalla(productos) {
     }
 
     productosFiltrados.forEach(p => {
-        // Formateo de precio total en pesos argentinos
         const precioFormateado = p.precio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
-        
-        // Traemos el campo descripción mapeado desde la Columna H de tu Drive
         const descripcionProd = p.descripcion ? p.descripcion : "Sin descripción disponible.";
 
         const tarjetaHTML = `
@@ -130,6 +139,7 @@ function renderizarProductosEnPantalla(productos) {
         contenedorGrid.innerHTML += tarjetaHTML;
     });
 }
+
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
@@ -156,47 +166,11 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// Asegura que el código se ejecute solo cuando la página cargue por completo
+// Inicializadores automáticos al cargar el DOM
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Sistema de redirección de 08 Play John activado de forma segura.");
+    actualizarGloboCarrito();
+    inicializarBuscadorGlobal();
+    cargarProductosDesdeDrive();
 });
 
-// Función definitiva e inmune para abrir WhatsApp
-function abrirWppPlayJohn() {
-    const telefono = "5491141701483";
-    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
-    
-    // Forzamos al navegador a abrir exactamente la URL procesada
-    window.open(urlWpp, "_blank");
-}
-
-// Función definitiva e inmune para abrir Instagram
-function abrirIgPlayJohn() {
-    const urlIg = "https://instagram.com";
-    
-    // Forzamos al navegador a abrir exactamente la URL procesada
-    window.open(urlIg, "_blank");
-}
-
-
-// 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
-function abrirWppPlayJohn() {
-    const telefono = "5491141701483";
-    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    
-    // NOTA: Aseguramos la barra '/' después de .com
-    const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
-    
-    window.open(urlWpp, "_blank");
-}
-
-// 2. FUNCIÓN PARA ABRIR EL INSTAGRAM DIRECTO DE PLAY JOHN
-function abrirIgPlayJohn() {
-    const usuarioIg = "08playjohn";
-    
-    // NOTA: Aseguramos la barra '/' después de .com y al final
-    const urlIg = "https://instagram.com" + usuarioIg + "/";
-    
-    window.open(urlIg, "_blank");
-}
