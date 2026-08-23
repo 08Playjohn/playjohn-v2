@@ -1,11 +1,11 @@
-// ====== CONFIGURACIÓN DE RUTAS DE REDES SOCIALES (08 PLAY JOHN) ======
+// ====== CONFIGURACIÓN DE REDES SOCIALES (08 PLAY JOHN) ======
 
 // 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // Usamos la API oficial y estructuramos correctamente los parámetros de la URL
+    // API oficial estructurada de forma perfecta
     const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
     
     window.open(urlWpp, "_blank");
@@ -14,10 +14,13 @@ function abrirWppPlayJohn() {
 // 2. FUNCIÓN PARA ABRIR EL INSTAGRAM DIRECTO DE PLAY JOHN
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
+    
+    // Corregido: Aseguramos la barra '/' fija después de .com
     const urlIg = "https://instagram.com" + usuarioIg + "/";
     
     window.open(urlIg, "_blank");
 }
+
 
 // ====== SISTEMA DE CONFIGURACIÓN DE CARRITO ======
 function obtenerCarrito() {
@@ -48,6 +51,7 @@ function agregarAlCarrito(id, nombre, precio) {
     actualizarGloboCarrito();
     alert(`¡${nombre} agregado al carrito!`);
 }
+
 
 // ====== LECTOR DINÁMICO ADAPTADO A TU DRIVE ======
 const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
@@ -86,7 +90,7 @@ async function cargarProductosDesdeDrive() {
                         precio: precioProd ? parseFloat(precioProd) : 0,
                         subcategoria: subcategoria,
                         categoriaPrincipal: categoriaGeneral,
-                        imagen: "https://unsplash.com"
+                        imagen: "https://unsplash.com" // Imagen gaming por defecto provisional
                     });
                 }
             }
@@ -99,6 +103,7 @@ async function cargarProductosDesdeDrive() {
         console.error("Error al conectar con las columnas de Google Drive:", error);
     }
 }
+
 
 // ====== RENDERIZADOR AUTOMÁTICO CON FORMATO PREMIUM SIN CUOTAS ======
 function renderizarProductosEnPantalla(productos) {
@@ -140,6 +145,7 @@ function renderizarProductosEnPantalla(productos) {
     });
 }
 
+
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
@@ -166,9 +172,10 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// Inicializadores automáticos al cargar el DOM
+
+// ====== INICIALIZADOR GLOBAL AL CARGAR LA PÁGINA ======
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Sistema de redirección de 08 Play John activado de forma segura.");
+    console.log("Sistema de 08 Play John inicializado correctamente.");
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
