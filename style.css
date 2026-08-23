@@ -689,3 +689,25 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 .wpp-floating-btn svg {
     display: block;
 }
+/* ==========================================
+   AJUSTE DEL LOGO EN LA CABECERA
+   ========================================== */
+.logo-brand-box {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    max-width: 180px; /* Limita el ancho para que no choque con el buscador */
+    transition: transform 0.2s ease;
+}
+
+.logo-brand-box:hover {
+    transform: scale(1.05); /* Efecto sutil de agrandamiento al pasar el mouse */
+}
+
+.header-logo-img {
+    width: 100%;
+    height: auto;
+    max-height: 50px; /* Limita el alto para que la barra principal no quede gigante */
+    object-fit: contain; /* Evita que el logo se deforme o estire */
+    display: block;
+}
