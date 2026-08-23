@@ -153,10 +153,10 @@ function enviarPedidoWhatsApp() {
     mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-     const telefono = "5491141701483"; 
-            window.location.assign("https://wa.me/5491141701483?text=" + encodeURIComponent(mensaje));
-        });
-    }
+    const telefono = "5491141701483"; 
+    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    
+    window.open(urlFinal, "_blank");
 }
 
 // ==========================================
