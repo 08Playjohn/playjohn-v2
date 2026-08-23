@@ -44,7 +44,7 @@ function agregarAlCarrito(id, nombre, precio) {
 }
 
 // ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
-const URL_DRIVE_JSON = "https://google.com";
+const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
 async function cargarProductosDesdeDrive() {
     try {
