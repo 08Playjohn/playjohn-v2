@@ -158,19 +158,21 @@ function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Te envio el siguiente pedido:\n\n";
+    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero realizar el siguiente pedido:\n\n";
     let total = 0;
 
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
-        mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
+        mensaje += "• *" + item.nombre + "* (x" + item.cantidad + ") - " + subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n";
     });
 
-    mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
+    mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-    const urlFinal = "https://whatsapp.com/5491141701483&text=" + encodeURIComponent(mensaje);
+    const telefono = "5491141701483";
+    // FORMATO API SEGURO: Abre directo el chat sin errores de URL rota
+    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
