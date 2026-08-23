@@ -153,7 +153,7 @@ function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Te envio el siguiente pedido:\n\n";
+    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero coordinar la compra de los siguientes productos:\n\n";
     let total = 0;
 
     carrito.forEach(item => {
@@ -165,10 +165,14 @@ function enviarPedidoWhatsApp() {
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-    // CORRECCIÓN AQUÍ: Se cambió a la API correcta de WhatsApp con la estructura '?phone='
-    const urlFinal = "https://whatsapp.com" + encodeURIComponent(mensaje);
+    const telefono = "5491141701483";
+    
+    // CORRECCIÓN ABSOLUTA: Construcción de URL codificada segura
+    const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
+    
     window.open(urlFinal, "_blank");
 }
+
 
 
 // ==========================================
