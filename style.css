@@ -257,48 +257,26 @@ body {
     color: #aaa;
     line-height: 1.5;
 }
-
-/* ==========================================
-   WHATSAPP FLOTANTE
-   ========================================== */
-.whatsapp-btn {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 60px;
-    height: 60px;
-    background-color: #25d366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    z-index: 100;
-}
-
-.whatsapp-btn img {
-    width: 32px;
-    height: 32px;
-}
-/* Cambia el color del 08 en el texto del logotipo */
-.logo-highlight {
-    color: #e50914; /* Rojo vibrante estilo gamer */
-    font-weight: bold;
-}
-
-/* Alinea el bloque de redes en horizontal si se desordenan */
+/* Quita los bordes feos de los botones de JS y los alinea */
 .social-block {
     display: flex;
     align-items: center;
-    gap: 12px; /* Espacio uniforme entre el título y los iconos */
+    gap: 12px;
 }
 
-/* Espaciado para los enlaces de los iconos */
-.social-icon {
+.social-btn-js {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
     display: inline-block;
-    transition: transform 0.2s ease; /* Efecto sutil al pasar el mouse */
+    transition: transform 0.2s ease;
 }
 
-.social-icon:hover {
-    transform: scale(1.1); /* Agranda ligeramente el icono al pasar el mouse */
+.social-btn-js:hover {
+    transform: scale(1.1); /* Efecto sutil al pasar el mouse */
+}
+
+.social-btn-js img {
+    display: block;
 }
