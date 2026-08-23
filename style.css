@@ -295,7 +295,6 @@ body {
     background-color: #f5f5f7; /* Fondo gris claro sutil para resaltar las tarjetas blancas */
 }
 
-/* Tarjeta entera */
 .product-card {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -305,7 +304,82 @@ body {
     flex-direction: column;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* AGREGÁ ESTAS 3 LÍNEAS PARA COHESIÓN VISUAL PERFECTA */
+    height: 100%; 
+    min-height: 520px; 
+    justify-content: space-between;
 }
+Usa el código con precaución.¿Al hacer la limpieza con Ctrl + F5 pudiste comprobar cómo se despliegan enteros los textos técnicos de los cargadores y cables en pantalla?Enviaste 1 imagen y dijiste antes de modificar nada, quiero por favor cambiar el color me gustaria que el fondo sea negro, las letras blancas y el boton de comprar en verdeantes de modificar nada, quiero por favor cambiar el color me gustaria que el fondo sea negro, las letras blancas y el boton de comprar en verde¡Perfecto! No toques nada más. Vamos a cambiar exactamente esos tres elementos visuales para dejar la base de la tarjeta con una estética gamer imponente: fondo negro absoluto, textos limpios en blanco y el botón en un verde vibrante que invite a dar clic.Para lograrlo, abre tu archivo style.css, busca la sección que agregamos al final llamada .product-info-block (y sus etiquetas hijas) y reemplázala por completo por este bloque de código limpio y calibrado:css/* ==========================================
+   PERSONALIZACIÓN OSCURA PREMIUM CON BOTÓN VERDE
+   ========================================== */
+
+/* Bloque Inferior: Fondo Negro Absoluto solicitado */
+.product-info-block {
+    background-color: #000000 !important; 
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* Título del Hardware: Letras Blancas limpias */
+.product-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* Descripción Técnica: Blanco Sutil / Gris claro para lectura prolija sin encimarse */
+.product-description {
+    font-size: 12px;
+    color: #e2e8f0 !important; 
+    margin-bottom: 15px;
+    line-height: 1.4;
+    display: block !important;
+    overflow: visible !important;
+}
+
+/* Precio Neto Destacado en Blanco Puro */
+.product-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff !important;
+    margin-top: auto;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+/* Botón de Compra del Carrito: Verde Vibrante solicitado */
+.add-to-cart-btn {
+    background-color: #25d366 !important; /* Verde WhatsApp / Gamer */
+    color: #000000 !important; /* Texto en negro para que resalte y contraste a la perfección */
+    border: none !important;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Efecto al pasar el mouse por encima del botón verde */
+.add-to-cart-btn:hover {
+    background-color: #1ebd56 !important; /* Verde un tono más oscuro al posarse */
+}
+Usa el código con precaución.🚀 Pasos rápidos para desplegar el cambio de colores:Guarda la modificación directamente en tu archivo style.css (Ctrl + S).Sube el diseño a tu repositorio ejecutando en tu terminal:bashgit add style.css
+git commit -m "Cambio de paleta a fondo negro y boton verde"
+git push origin main
+Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la subida.Abre la web en tu navegador y presiona Ctrl + F5 para limpiar el caché visual viejo.¿Lograste ver cómo impactó el bloque inferior en negro con las letras blancas y el botón verde brillante?
 
 .product-card:hover {
     transform: translateY(-4px);
@@ -397,4 +471,65 @@ body {
 
 .add-to-cart-btn:hover {
     background-color: #0099dd;
+}
+/* ==========================================
+   BOTONES DE FILTRADO PREMIUM GAMER
+   ========================================== */
+.filter-container-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 4%;
+    background-color: #0d0d0d;
+}
+
+.filter-btn {
+    background-color: #111112;
+    color: #ffffff;
+    border: 1px solid #222225;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+}
+
+.filter-btn:hover {
+    border-color: #8c00ff;
+    box-shadow: 0 0 10px rgba(140, 0, 255, 0.3);
+}
+
+.filter-btn.active {
+    background-color: #e50914; /* Color rojo de tu marca para el botón seleccionado */
+    border-color: #e50914;
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+}
+
+/* ==========================================
+   LIBERACIÓN DE TEXTO DE DESCRIPCIÓN COMPLETA
+   ========================================== */
+.product-description {
+    font-size: 12px;
+    color: #aaaaaa;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    min-height: auto; /* Eliminamos la altura mínima fija */
+    display: block !important; /* Quitamos el contenedor recortador antiguo */
+    overflow: visible !important; /* Permitimos que se expanda hacia abajo libremente */
+    text-align: left; /* Lectura técnica mucho más prolija */
+}
+
+/* Asegura que el título tampoco corte palabras */
+.product-title {
+    display: block !important;
+    overflow: visible !important;
+    min-height: auto;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin-bottom: 10px;
+    line-height: 1.3;
 }
