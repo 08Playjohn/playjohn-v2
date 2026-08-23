@@ -137,25 +137,31 @@ function renderizarItemsCarrito() {
 // ==========================================
 // 3. FUNCIÓN ÚNICA DE ENVÍO DE PEDIDO
 // ==========================================
+// ==========================================
+// 3. FUNCIÓN ÚNICA DE ENVÍO DE PEDIDO (TEXTO PLANO SANADO)
+// ==========================================
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero realizar el siguiente pedido:\n\n";
+    // Usamos solo letras y saltos de línea comunes (\n)
+    let mensaje = "NUEVO PEDIDO - 08 PLAY JOHN\n\nHola! Quiero realizar el siguiente pedido:\n\n";
     let total = 0;
 
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
-        mensaje += "• *" + item.nombre + "* (x" + item.cantidad + ") - " + subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n";
+        // Texto plano sin asteriscos ni viñetas raras
+        mensaje += " - " + item.nombre + " (Cantidad: " + item.cantidad + ") - Subtotal: $" + subtotal.toLocaleString('es-AR') + "\n";
     });
 
-    mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
-    mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
+    mensaje += "\nTotal del Pedido: $" + total.toLocaleString('es-AR') + "\n\n";
+    mensaje += "Tienen disponibilidad de stock para confirmar el pago?";
 
-    const telefono = "5491141701483"; 
-    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    const telefono = "5491141701483";
     
+    // API Directa uniendo las variables con texto limpio
+    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
