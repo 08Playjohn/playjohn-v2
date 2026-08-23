@@ -35,9 +35,11 @@ function enviarPedidoWhatsApp() {
 
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    const urlIg = "https://instagram.com" + usuarioIg + "/";
+    // Agregamos la barra '/' después de instagram.com
+    const urlIg = "https://instagram.com" + usuarioIg + "/"; 
     window.open(urlIg, "_blank");
 }
+
 
 // ==========================================
 // 2. LÓGICA INTERACTIVA DEL CARRITO
