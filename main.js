@@ -44,7 +44,7 @@ function agregarAlCarrito(id, nombre, precio) {
 }
 
 // ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
-const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+const URL_DRIVE_JSON = "https://google.com";
 
 async function cargarProductosDesdeDrive() {
     try {
@@ -52,30 +52,39 @@ async function cargarProductosDesdeDrive() {
         const respuesta = await fetch(URL_DRIVE_JSON);
         const productosLista = await respuesta.json();
         
-        console.log("Conexión exitosa. Datos recibidos:", productosLista);
-        renderizarProductosEnPantalla(productosLista);
+        console.log("Conexión exitosa. Catálogo recibido.");
+        
+        // Guardamos de forma global para poder filtrar sin volver a hacer fetch
+        window.productosGuardadosGlobal = productosLista;
+        
+        // Inicializamos mostrando "todos" los productos
+        renderizarProductosEnPantalla(productosLista, "todos");
+        
     } catch (error) {
         console.error("Error crítico al leer datos desde Google Drive:", error);
     }
 }
 
-// ====== RENDERIZADOR COMPATIBLE ESTILO CATALOGO MODERNO (SOLO COMPRAR) ======
-function renderizarProductosEnPantalla(productos) {
+// ====== RENDERIZADOR MEJORADO CON FILTROS DINÁMICOS Y TEXTO COMPLETO ======
+function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
 
-    const esPaginaComputacion = window.location.pathname.includes('computacion');
     contenedorGrid.innerHTML = '';
     let productosDibujados = 0;
 
     productos.forEach((producto, index) => {
         if (!producto || !producto.categoria || !producto.nombre) return;
 
+        // Estandarizamos la categoría que viene de tu planilla Excel
         const catFormateada = producto.categoria.toLowerCase().trim();
         const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
-        let esDeConsolas = listaConsolas.includes(catFormateada);
         
-        if ((esPaginaComputacion && !esDeConsolas) || (!esPaginaComputacion && esDeConsolas)) {
+        let categoriaAsignada = listaConsolas.includes(catFormateada) ? "consolas" : "computacion";
+        
+        // Filtro lógico: si el filtro es 'todos', pasa. Si no, debe coincidir exactamente
+        if (filtroSeleccionado === "todos" || categoriaAsignada === filtroSeleccionado) {
+            
             const prodId = producto.id ? producto.id : `drive_${index}`;
             const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
             const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
@@ -103,8 +112,20 @@ function renderizarProductosEnPantalla(productos) {
     });
 
     if (productosDibujados === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles en esta sección por el momento.</p>`;
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles bajo esta categoría.</p>`;
     }
+}
+
+// ====== FUNCIÓN PARA DISPARAR LOS BOTONES DE FILTRADO EN PANTALLA ======
+function filtrarCatalogo(categoria) {
+    if (!window.productosGuardadosGlobal) return;
+    
+    // Cambiamos el estado de los botones visuales
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Renderizamos la grilla con el nuevo filtro aplicado
+    renderizarProductosEnPantalla(window.productosGuardadosGlobal, categoria);
 }
 
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
@@ -114,8 +135,11 @@ function inicializarBuscadorGlobal() {
 
     function ejecutarBusqueda(texto) {
         const busqueda = texto.trim().toLowerCase();
-        if (busqueda === '') return;
-        alert('Buscando "' + texto + '" en el catálogo de 08 Play John...');
+        if (busqueda === '' || !window.productosGuardadosGlobal) return;
+
+        // Filtramos de forma dinámica en la pantalla actual los nombres que coincidan
+        const productosEncontrados = window.productosGuardadosGlobal.filter(p => p.nombre.toLowerCase().includes(busqueda));
+        renderizarProductosEnPantalla(productosEncontrados, "todos");
     }
 
     searchButtons.forEach((btn, idx) => {
@@ -128,8 +152,9 @@ function inicializarBuscadorGlobal() {
 
 // ====== INICIALIZADOR AL CARGAR LA PÁGINA ======
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Catálogo JSON Automatizado para 08 Play John cargado.");
+    console.log("Catálogo Inteligente Unificado para 08 Play John inicializado.");
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
 });
+
