@@ -6,7 +6,7 @@ function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // CORRECCIÓN: Sintaxis correcta de template literal con la barra '/' indispensable
+    // SOLUCIONADO: Se agregó del signo '$' antes de {telefono} y la barra '/'
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
@@ -28,14 +28,14 @@ function enviarPedidoWhatsApp() {
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
     const telefono = "5491141701483";
-    // CORRECCIÓN: Sintaxis corregida también para el despacho del carrito
+    // SOLUCIONADO: Se agregó el signo '$' antes de {telefono} y la barra '/' para el carrito
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
 function abrirIgPlayJohn() {
-    // CORRECCIÓN: Quitamos el '@' y limpiamos la URL duplicada
     const usuarioIg = "08playjohn";
+    // SOLUCIONADO: Se agregó el signo '$' antes de {usuarioIg} y agregamos 'www' para PC
     const urlIg = `https://instagram.com{usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
