@@ -64,45 +64,42 @@ async function cargarProductosDesdeDrive() {
     }
 }
 
-// ====== RENDERIZADOR COMPATIBLE CON TU JSON (SIN IMPUESTOS NI CUOTAS) ======
+// ====== RENDERIZADOR COMPATIBLE ESTILO CATALOGO MODERNO (SOLO COMPRAR) ======
 function renderizarProductosEnPantalla(productos) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
 
-    // Detectamos en qué página HTML está parado el cliente
     const esPaginaComputacion = window.location.pathname.includes('computacion');
-    
     contenedorGrid.innerHTML = '';
     let productosDibujados = 0;
 
     productos.forEach((producto, index) => {
         if (!producto || !producto.categoria || !producto.nombre) return;
 
-        // Estandarizamos la categoría que viene de tu Drive
         const catFormateada = producto.categoria.toLowerCase().trim();
         const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
-        
-        // Clasificación inteligente
         let esDeConsolas = listaConsolas.includes(catFormateada);
         
-        // Filtramos para inyectar solo lo que corresponde a cada sección web
         if ((esPaginaComputacion && !esDeConsolas) || (!esPaginaComputacion && esDeConsolas)) {
             
-            // ID de seguridad único por fila
             const prodId = producto.id ? producto.id : `drive_${index}`;
             const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
+            // Formateo de precio limpio sin centavos
             const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
             const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
             const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
 
-            // Armamos la tarjeta limpia requerida: sin cuotas, sin leyendas fiscales, con sumador de carrito
+            // NUEVA ESTRUCTURA DIVIDIDA: Caja superior blanca + Bloque inferior oscuro
             const tarjetaHTML = `
                 <div class="product-card">
+                    <!-- Bloque Superior Blanco para la foto -->
                     <div class="product-img-box">
                         <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
                     </div>
-                    <div class="product-info">
-                        <h3>${producto.nombre}</h3>
+                    
+                    <!-- Bloque Inferior Oscuro para la Información -->
+                    <div class="product-info-block">
+                        <h3 class="product-title">${producto.nombre}</h3>
                         <p class="product-description">${descripcionProd}</p>
                         <p class="product-price">${precioFormateado}</p>
                         <button class="add-to-cart-btn" onclick="agregarAlCarrito('${prodId}', '${producto.nombre.replace(/'/g, "\\'")}', ${precioLimpio})">
@@ -115,6 +112,11 @@ function renderizarProductosEnPantalla(productos) {
             productosDibujados++;
         }
     });
+
+    if (productosDibujados === 0) {
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles en esta sección por el momento.</p>`;
+    }
+}
 
     // Si la sección queda vacía colocamos un mensaje decorativo gamer
     if (productosDibujados === 0) {
