@@ -1,5 +1,6 @@
-// ====== CONFIGURACIÓN DE REDES SOCIALES (08 PLAY JOHN) ======
-
+// ==========================================
+// 1. CONFIGURACIÓN DE REDES SOCIALES
+// ==========================================
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
@@ -13,7 +14,9 @@ function abrirIgPlayJohn() {
     window.open(urlIg, "_blank");
 }
 
-// ====== LÓGICA DE CONTROL DEL CARRITO LATERAL ======
+// ==========================================
+// 2. LÓGICA INTERACTIVA DEL CARRITO
+// ==========================================
 function toggleCarritoLateral() {
     const sidebar = document.getElementById('carrito-lateral');
     if (sidebar) {
@@ -52,10 +55,10 @@ function agregarAlCarrito(id, nombre, precio) {
     actualizarGloboCarrito();
     renderizarItemsCarrito();
     
-    document.getElementById('carrito-lateral').classList.add('open');
+    const sidebar = document.getElementById('carrito-lateral');
+    if (sidebar) sidebar.classList.add('open');
 }
 
-// NUEVA FUNCIÓN: Modificar cantidades de forma directa (+ o -)
 function cambiarCantidadItem(id, operacion) {
     let carrito = obtenerCarrito();
     const producto = carrito.find(item => item.id === id);
@@ -67,7 +70,6 @@ function cambiarCantidadItem(id, operacion) {
             producto.cantidad -= 1;
         }
         
-        // Si la cantidad llega a 0, lo eliminamos automáticamente
         if (producto.cantidad <= 0) {
             carrito = carrito.filter(item => item.id !== id);
         }
@@ -86,7 +88,6 @@ function eliminarDelCarrito(id) {
     renderizarItemsCarrito();
 }
 
-// ====== DIBUJAR ITEMS CON SELECTORES DE CANTIDAD ======
 function renderizarItemsCarrito() {
     const contenedorItems = document.getElementById('cart-items-container');
     const contenedorTotal = document.getElementById('cart-total-value');
@@ -106,13 +107,11 @@ function renderizarItemsCarrito() {
         const subtotal = item.precio * item.cantidad;
         totalAcumulado += subtotal;
 
-        const filaHTML = `
+        contenedorItems.innerHTML += `
             <div class="cart-item-row">
                 <div class="cart-item-details">
                     <h4>${item.nombre}</h4>
                     <p>${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}</p>
-                    
-                    <!-- Botonera interactiva de cantidades añadida -->
                     <div class="cart-qty-control">
                         <button type="button" class="qty-btn" onclick="cambiarCantidadItem('${item.id}', 'restar')">−</button>
                         <span class="qty-number">${item.cantidad}</span>
@@ -122,19 +121,14 @@ function renderizarItemsCarrito() {
                 <button type="button" class="remove-item-btn" onclick="eliminarDelCarrito('${item.id}')">✕</button>
             </div>
         `;
-        contenedorItems.innerHTML += filaHTML;
     });
 
     contenedorTotal.innerText = totalAcumulado.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
 }
 
-// ====== ENVIAR EL PEDIDO REPARADO A TU WHATSAPP ======
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
-    if (carrito.length === 0) {
-        alert("Tu carrito está vacío.");
-        return;
-    }
+    if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
     let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero coordinar la compra de los siguientes productos:\n\n";
     let total = 0;
@@ -148,17 +142,18 @@ function enviarPedidoWhatsApp() {
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-    // Dirección forzada inmune a bloqueos
     const urlFinal = "https://whatsapp.com5491141701483&text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
-// ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
+// ==========================================
+// 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
+// ==========================================
 const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
 async function cargarProductosDesdeDrive() {
     try {
-        console.log("Iniciando sincronización con el JSON de Google Drive...");
+        console.log("Sincronizando con Google Drive...");
         const respuesta = await fetch(URL_DRIVE_JSON);
         const productosLista = await respuesta.json();
         
@@ -169,7 +164,6 @@ async function cargarProductosDesdeDrive() {
     }
 }
 
-// ====== RENDERIZADOR COMPATIBLE CON TU PALETA OSCURA ======
 function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
@@ -191,7 +185,7 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
             const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
             const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
 
-            const tarjetaHTML = `
+            contenedorGrid.innerHTML += `
                 <div class="product-card">
                     <div class="product-img-box">
                         <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
@@ -206,7 +200,6 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
                     </div>
                 </div>
             `;
-            contenedorGrid.innerHTML += tarjetaHTML;
             productosDibujados++;
         }
     });
@@ -218,84 +211,16 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
 
 function filtrarCatalogo(categoria) {
     if (!window.productosGuardadosGlobal) return;
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    renderizarProductosEnPantalla(window.productosGuardadosGlobal, categoria);
-}
-
-function inicializarBuscadorGlobal() {
-    const searchInputs = document.querySelectorAll('.search-area input');
-    const searchButtons = document.querySelectorAll('.search-btn');
-
-    function ejecutarBusqueda(texto) {
-        const busqueda = texto.trim().toLowerCase();
-        if (busqueda === '' || !window.productosGuardadosGlobal) return;
-
-        const productosEncontrados = window.productosGuardadosGlobal.filter(p => p.nombre.toLowerCase().includes(busqueda));
-        renderizarProductosEnPantalla(productosEncontrados, "todos");
-    }
-
-// ====== RENDERIZADOR COMPATIBLE CON TU PALETA OSCURA ======
-function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
-    const contenedorGrid = document.querySelector('.products-grid');
-    if (!contenedorGrid) return; 
-
-    contenedorGrid.innerHTML = '';
-    let productosDibujados = 0;
-
-    productos.forEach((producto, index) => {
-        if (!producto || !producto.categoria || !producto.nombre) return;
-
-        const catFormateada = producto.categoria.toLowerCase().trim();
-        const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
-        let categoriaAsignada = listaConsolas.includes(catFormateada) ? "consolas" : "computacion";
-        
-        if (filtroSeleccionado === "todos" || categoriaAsignada === filtroSeleccionado) {
-            const prodId = producto.id ? producto.id : `drive_${index}`;
-            const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
-            const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
-            const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
-            const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
-
-            const tarjetaHTML = `
-                <div class="product-card">
-                    <div class="product-img-box">
-                        <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
-                    </div>
-                    <div class="product-info-block">
-                        <h3 class="product-title">${producto.nombre}</h3>
-                        <p class="product-description">${descripcionProd}</p>
-                        <p class="product-price">${precioFormateado}</p>
-                        <button class="add-to-cart-btn" onclick="agregarAlCarrito('${prodId}', '${producto.nombre.replace(/'/g, "\\'")}', ${precioLimpio})">
-                            🛒 COMPRAR
-                        </button>
-                    </div>
-                </div>
-            `;
-            contenedorGrid.innerHTML += tarjetaHTML;
-            productosDibujados++;
-        }
-    });
-
-    if (productosDibujados === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles bajo esta categoría.</p>`;
-    }
-}
-
-// ====== SISTEMA DE FILTRADO INTERACTIVO ======
-function filtrarCatalogo(categoria) {
-    if (!window.productosGuardadosGlobal) return;
-    
-    // Cambiamos el botón activo visualmente
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     if (event && event.target) {
         event.target.classList.add('active');
     }
-    
     renderizarProductosEnPantalla(window.productosGuardadosGlobal, categoria);
 }
 
-// ====== BUSCADOR ASINCRÓNICO GLOBAL ======
+// ==========================================
+// 4. BUSCADOR GLOBAL Y REFRESCADO
+// ==========================================
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
     const searchButtons = document.querySelectorAll('.search-btn');
@@ -307,6 +232,11 @@ function inicializarBuscadorGlobal() {
         const productosEncontrados = window.productosGuardadosGlobal.filter(p => p.nombre.toLowerCase().includes(busqueda));
         renderizarProductosEnPantalla(productosEncontrados, "todos");
     }
+
+    searchButtons.forEach((btn, idx) => {
+        btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
+    });
+
 
     searchButtons.forEach((btn, idx) => {
         btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
