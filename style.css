@@ -168,9 +168,10 @@ body {
    ========================================== */
 .hero-carousel {
     width: 100%;
-    padding: 40px 0;
+    padding: 20px 0;
     display: flex;
     justify-content: center;
+    background-color: #0d0d0d;
 }
 
 .carousel-container {
@@ -186,11 +187,15 @@ body {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    background-color: #111; /* Fondo oscuro por si tarda en cargar la imagen */
 }
 
 .carousel-img {
     width: 100%;
     height: auto;
+    max-height: 450px; /* Evita que la propaganda tape toda la pantalla */
+    object-fit: cover; /* Centra y recorta los bordes proporcionalmente si la foto no es exacta */
     display: block;
 }
 
