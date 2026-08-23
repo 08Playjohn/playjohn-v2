@@ -153,14 +153,11 @@ function enviarPedidoWhatsApp() {
     mensaje += "\n💰 *Total del Pedido:* " + total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }) + "\n\n";
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-    const telefono = "5491141701483";
-    
-    // ESTA ES LA URL LIMPIA QUE DEBE QUEDAR
-    // LINEA 159 CORREGIDA:
-    const urlFinal = "https://whatsapp.com" + 5491141701483 + "&text=" + encodeURIComponent(mensaje);
-    window.open(urlFinal, "_blank");
+     const telefono = "5491141701483"; 
+            window.location.assign("https://wa.me/5491141701483?text=" + encodeURIComponent(mensaje));
+        });
+    }
 }
-
 
 // ==========================================
 // 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
