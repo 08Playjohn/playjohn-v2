@@ -172,11 +172,23 @@ function abrirWppPlayJohn() {
     window.open(urlWpp, "_blank");
 }
 
+// 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
+function abrirWppPlayJohn() {
+    const telefono = "5491141701483";
+    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
+    
+    // NOTA: Aseguramos la barra '/' después de .com
+    const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    
+    window.open(urlWpp, "_blank");
+}
+
 // 2. FUNCIÓN PARA ABRIR EL INSTAGRAM DIRECTO DE PLAY JOHN
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
+    
+    // NOTA: Aseguramos la barra '/' después de .com y al final
     const urlIg = "https://instagram.com" + usuarioIg + "/";
     
-    // Abre en una nueva pestaña de forma segura
     window.open(urlIg, "_blank");
 }
