@@ -72,15 +72,20 @@ html, body {
 }
 
 /* ==========================================
-   HEADER PRINCIPAL (ESTILO FULLH4RD)
+   MINIMIZACIÓN DE CABECERA Y LOGO FLOTANTE LIBRE
    ========================================== */
 .main-header {
-    background-color: #0b0b0c;
-    padding: 15px 4%;
+    background-color: #0b0b0c !important;
+    padding: 0px 4% !important; /* Eliminamos el relleno para que sea ultra fina */
     border-bottom: 2px solid #8c00ff;
     width: 100%;
+    position: relative;
+    height: 65px !important; /* Forzamos a que la barra negra mida solo 65px de alto */
+    display: flex;
+    align-items: center;
 }
 
+/* El contenedor interno respeta la altura fija delgada */
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -88,47 +93,40 @@ html, body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-}
-
-.logo-text {
-    color: #e50914 !important; /* Rojo gamer para todo el texto */
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 22px;
-}
-
-.search-area {
-    flex: 1;
-    max-width: 500px;
-    display: flex;
+    width: 100%;
+    height: 100%;
     position: relative;
 }
 
-.search-area input {
-    width: 100%;
-    padding: 10px 15px;
-    background-color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #333;
-}
-
-.search-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.right-actions {
-    display: flex;
+/* EL TRUCO DEFINITIVO: Sacamos al logo por completo del flujo de la barra.
+   Ahora puede medir 130px de alto y colgar hacia abajo sin agrandar la franja negra. */
+.logo-brand-box {
+    display: inline-flex;
     align-items: center;
-    gap: 20px;
+    text-decoration: none;
+    position: absolute !important;
+    left: 4%;
+    top: 10px; /* Lo anclamos bien arriba */
+    z-index: 999999 !important;
+    height: auto;
+}
+
+.logo-brand-box:hover {
+    transform: scale(1.03); 
+}
+
+.header-logo-img {
+    width: auto;
+    height: 125px !important; /* Tu tamaño gigante intacto */
+    object-fit: contain; 
+    display: block;
+    filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.9));
+}
+
+/* Ajustamos el espacio del body para que los banners calcen al ras de la franja morada */
+body {
+    padding-top: 110px !important; 
+    background-color: #0d0d0d;
 }
 
 /* ==========================================
