@@ -695,11 +695,14 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 /* ==========================================
    AJUSTE DE TAMAÑO MAXI PARA EL LOGO
    ========================================== */
+/* ==========================================
+   TAMAÑO GIGANTE PARA EL LOGO (EL DOBLE)
+   ========================================== */
 .logo-brand-box {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    max-width: 280px; /* Ampliado de 180px a 280px para dar más espacio lateral */
+    max-width: 450px; /* Espacio de sobra de forma horizontal */
     transition: transform 0.2s ease;
 }
 
@@ -708,10 +711,9 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 }
 
 .header-logo-img {
-    width: 100%;
-    height: auto;
-    max-height: 90px; /* Ampliado de 50px a 90px para que se luzca imponente */
+    width: auto; /* Dejamos que el ancho se calcule solo de forma perfecta */
+    height: 140px !important; /* Forzamos la altura al doble para que se note el cambio */
     object-fit: contain; 
     display: block;
-    padding: 5px 0; /* Un pequeño margen arriba y abajo para que respire */
+    padding: 10px 0; /* Más espacio para que no toque los bordes morados */
 }
