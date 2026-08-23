@@ -146,6 +146,30 @@
 
     <!-- Vinculación del JavaScript -->
     <script src="main.js"></script>
+
+        <!-- MODAL LATERAL DESPLEGABLE DEL CARRITO DE COMPRAS -->
+    <div id="carrito-lateral" class="cart-sidebar">
+        <div class="cart-sidebar-header">
+            <h2>🛒 Mi Carrito</h2>
+            <button type="button" class="close-cart-btn" onclick="toggleCarritoLateral()">✕</button>
+        </div>
+        
+        <!-- Aquí se inyectarán los productos agregados -->
+        <div id="cart-items-container" class="cart-sidebar-body">
+            <!-- JavaScript rellenará este espacio -->
+        </div>
+
+        <div class="cart-sidebar-footer">
+            <div class="cart-total-box">
+                <span>Total:</span>
+                <span id="cart-total-value">$ 0</span>
+            </div>
+            <button type="button" class="checkout-btn" onclick="enviarPedidoWhatsApp()">
+                🚀 FINALIZAR PEDIDO POR WHATSAPP
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>
 
