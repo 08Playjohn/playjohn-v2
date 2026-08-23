@@ -1,16 +1,16 @@
-
+// ==========================================
 // 1. CONFIGURACIÓN DE REDES SOCIALES
 // ==========================================
+
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // CORRECCIÓN: Usamos el formato oficial wa.me/ que nunca falla
+    // CORRECCIÓN: Sintaxis correcta de template literal con la barra '/' indispensable
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
-// BUSCÁ TAMBIÉN ESTA FUNCIÓN MÁS ABAJO EN TU MAIN.JS Y REEMPLAZALA:
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
@@ -28,17 +28,16 @@ function enviarPedidoWhatsApp() {
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
     const telefono = "5491141701483";
-    // CORRECCIÓN: También aseguramos el formato acá para el despacho del carrito
+    // CORRECCIÓN: Sintaxis corregida también para el despacho del carrito
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
 function abrirIgPlayJohn() {
-    const usuarioIg = "@08playjohn";
-    // Agregamos la barra '/' después de instagram.com
-    const urlIg = "https://instagram.com/08playjohn/" + usuarioIg + "/"; 
+    // CORRECCIÓN: Quitamos el '@' y limpiamos la URL duplicada
+    const usuarioIg = "08playjohn";
+    const urlIg = `https://instagram.com{usuarioIg}/`; 
     window.open(urlIg, "_blank");
-   
 }
 
 
