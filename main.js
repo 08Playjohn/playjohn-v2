@@ -156,7 +156,8 @@ function enviarPedidoWhatsApp() {
     const telefono = "5491141701483";
     
     // ESTA ES LA URL LIMPIA QUE DEBE QUEDAR
-    const urlFinal = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
+    // LINEA 159 CORREGIDA:
+    const urlFinal = "https://whatsapp.com" + 5491141701483 + "&text=" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
 
