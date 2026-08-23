@@ -1,5 +1,6 @@
 // ====== CONFIGURACIÓN DE REDES SOCIALES (08 PLAY JOHN) ======
 
+// Función para abrir el WhatsApp de forma segura
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
@@ -7,9 +8,10 @@ function abrirWppPlayJohn() {
     window.open(urlWpp, "_blank");
 }
 
+// Función para abrir el Instagram de forma segura
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    const urlIg = "https://www.instagram.com/" + usuarioIg + "/";
+    const urlIg = "https://instagram.com" + usuarioIg + "/";
     window.open(urlIg, "_blank");
 }
 
@@ -43,102 +45,81 @@ function agregarAlCarrito(id, nombre, precio) {
     alert(`¡${nombre} agregado al carrito!`);
 }
 
-// ====== LECTOR DINÁMICO REESTRUCTURADO (COLUMNAS EXACTAS) ======
-const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+// ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
+const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
 async function cargarProductosDesdeDrive() {
     try {
-        const respuesta = await fetch(URL_DRIVE_CSV);
-        const datosTexto = await respuesta.text();
+        console.log("Iniciando sincronización con el JSON de Google Drive...");
+        const respuesta = await fetch(URL_DRIVE_JSON);
+        const productosLista = await respuesta.json();
         
-        const filas = datosTexto.split('\n').slice(1); 
-        const productos = [];
-
-        filas.forEach((fila, index) => {
-            // Regex seguro para separar celdas por comas sin romper descripciones largas
-            const columnas = fila.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || fila.split(',');
-            
-            // Verificamos que la fila contenga al menos hasta la columna K (mínimo 11 columnas)
-            if (columnas && columnas.length >= 11) {
-                
-                // Mapeo Dinámico según tus especificaciones
-                const nombreProd = columnas[0].replace(/"/g, '').trim();
-                const precioProd = columnas[6].replace(/"/g, '').replace(/[^0-9.]/g, '').trim();
-                const descripcionProd = columnas[7].replace(/"/g, '').trim();
-                const categoriaExcel = columnas[8].replace(/"/g, '').trim().toUpperCase();
-                const imagenProd = columnas[9].replace(/"/g, '').trim();
-                const visibleWeb = columnas[10].replace(/"/g, '').trim().toLowerCase();
-                
-                // Filtro dinámico: Solo se procesa si columna K es 'si' y tiene nombre válido
-                if (visibleWeb === 'si' && nombreProd !== "") {
-                    let categoriaGeneral = '';
-                    const listaConsolas = ['PS2', 'PS3', 'PS4', 'PS5', 'XBOX 360', 'NINTENDO WII', 'CONSOLAS'];
-                    const listaComputacion = ['COMPUTACION', 'AURICULARES', 'CABLES', 'MOUSES', 'TECLADOS'];
-
-                    if (listaConsolas.includes(categoriaExcel)) {
-                        categoriaGeneral = 'consolas';
-                    } else if (listaComputacion.includes(categoriaExcel)) {
-                        categoriaGeneral = 'computacion';
-                    }
-
-                    productos.push({
-                        id: `prod_${index}`,
-                        nombre: nombreProd,
-                        precio: precioProd ? parseFloat(precioProd) : 0,
-                        descripcion: descripcionProd ? descripcionProd : "Sin descripción disponible.",
-                        categoriaPrincipal: categoriaGeneral,
-                        imagen: imagenProd ? imagenProd : "https://unsplash.com"
-                    });
-                }
-            }
-        });
-
-        window.catalogoGlobal = productos;
-        renderizarProductosEnPantalla(productos);
+        console.log("Conexión exitosa. Datos recibidos:", productosLista);
+        
+        // Enviamos el listado directamente al renderizador de pantalla
+        renderizarProductosEnPantalla(productosLista);
 
     } catch (error) {
-        console.error("Error al conectar con las columnas de Google Drive:", error);
+        console.error("Error crítico al leer datos desde Google Drive:", error);
     }
 }
 
-// ====== RENDERIZADOR DIRECTO SIN IMPUESTOS NI CUOTAS ======
+// ====== RENDERIZADOR COMPATIBLE CON TU JSON (SIN IMPUESTOS NI CUOTAS) ======
 function renderizarProductosEnPantalla(productos) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
 
+    // Detectamos en qué página HTML está parado el cliente
     const esPaginaComputacion = window.location.pathname.includes('computacion');
-    const seccionObjetivo = esPaginaComputacion ? 'computacion' : 'consolas';
-    
-    const productosFiltrados = productos.filter(p => p.categoriaPrincipal === seccionObjetivo);
     
     contenedorGrid.innerHTML = '';
+    let productosDibujados = 0;
 
-    if (productosFiltrados.length === 0) {
-        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px;">No hay productos disponibles activos en este momento.</p>`;
-        return;
-    }
+    productos.forEach((producto, index) => {
+        if (!producto || !producto.categoria || !producto.nombre) return;
 
-    productosFiltrados.forEach(p => {
-        const precioFormateado = p.precio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+        // Estandarizamos la categoría que viene de tu Drive
+        const catFormateada = producto.categoria.toLowerCase().trim();
+        const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
+        
+        // Clasificación inteligente
+        let esDeConsolas = listaConsolas.includes(catFormateada);
+        
+        // Filtramos para inyectar solo lo que corresponde a cada sección web
+        if ((esPaginaComputacion && !esDeConsolas) || (!esPaginaComputacion && esDeConsolas)) {
+            
+            // ID de seguridad único por fila
+            const prodId = producto.id ? producto.id : `drive_${index}`;
+            const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
+            const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+            const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
+            const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
 
-        // Estructura limpia solicitada: Imagen, Título, Descripción, Precio Neto y Botón Único de Compra
-        const tarjetaHTML = `
-            <div class="product-card">
-                <div class="product-img-box">
-                    <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://unsplash.com'">
+            // Armamos la tarjeta limpia requerida: sin cuotas, sin leyendas fiscales, con sumador de carrito
+            const tarjetaHTML = `
+                <div class="product-card">
+                    <div class="product-img-box">
+                        <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
+                    </div>
+                    <div class="product-info">
+                        <h3>${producto.nombre}</h3>
+                        <p class="product-description">${descripcionProd}</p>
+                        <p class="product-price">${precioFormateado}</p>
+                        <button class="add-to-cart-btn" onclick="agregarAlCarrito('${prodId}', '${producto.nombre.replace(/'/g, "\\'")}', ${precioLimpio})">
+                            🛒 COMPRAR
+                        </button>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h3>${p.nombre}</h3>
-                    <p class="product-description">${p.descripcion}</p>
-                    <p class="product-price">${precioFormateado}</p>
-                    <button class="add-to-cart-btn" onclick="agregarAlCarrito('${p.id}', '${p.nombre}', ${p.precio})">
-                        🛒 COMPRAR
-                    </button>
-                </div>
-            </div>
-        `;
-        contenedorGrid.innerHTML += tarjetaHTML;
+            `;
+            contenedorGrid.innerHTML += tarjetaHTML;
+            productosDibujados++;
+        }
     });
+
+    // Si la sección queda vacía colocamos un mensaje decorativo gamer
+    if (productosDibujados === 0) {
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles en esta sección por el momento.</p>`;
+    }
 }
 
 // ====== BUSCADOR ASINCRÓNICO GLOBAL ======
@@ -148,15 +129,9 @@ function inicializarBuscadorGlobal() {
 
     function ejecutarBusqueda(texto) {
         const busqueda = texto.trim().toLowerCase();
-        if (busqueda === '' || !window.catalogoGlobal) return;
+        if (busqueda === '') return;
 
-        const encontrado = window.catalogoGlobal.find(p => p.nombre.toLowerCase().includes(busqueda));
-
-        if (encontrado && encontrado.categoriaPrincipal !== '') {
-            window.location.href = `${encontrado.categoriaPrincipal}.html`;
-        } else {
-            alert('No se encontraron productos activos con ese nombre.');
-        }
+        alert('Buscando "' + texto + '" en el catálogo de 08 Play John...');
     }
 
     searchButtons.forEach((btn, idx) => {
@@ -167,9 +142,9 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// Inicializador General al Cargar el sitio
+// ====== INICIALIZADOR AL CARGAR LA PÁGINA ======
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Catálogo automatizado de 08 Play John listo.");
+    console.log("Catálogo JSON Automatizado para 08 Play John cargado.");
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
