@@ -44,7 +44,7 @@ function agregarAlCarrito(id, nombre, precio) {
 }
 
 // ====== LECTOR DINÁMICO REESTRUCTURADO (COLUMNAS EXACTAS) ======
-const URL_DRIVE_CSV = "https://google.com";
+const URL_DRIVE_CSV = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
 async function cargarProductosDesdeDrive() {
     try {
