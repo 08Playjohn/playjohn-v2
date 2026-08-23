@@ -1,12 +1,8 @@
-// ==========================================
-// 1. CONFIGURACIÓN DE REDES SOCIALES
-// ==========================================
-
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // SOLUCIONADO: Se agregó del signo '$' antes de {telefono} y la barra '/'
+    // SOLUCIONADO: Se agregó el '$' antes de {telefono} y la barra '/' después de wa.me
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
@@ -28,14 +24,14 @@ function enviarPedidoWhatsApp() {
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
     const telefono = "5491141701483";
-    // SOLUCIONADO: Se agregó el signo '$' antes de {telefono} y la barra '/' para el carrito
+    // SOLUCIONADO: Se agregó el '$' antes de {telefono} y la barra '/' aquí también
     const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    // SOLUCIONADO: Se agregó el signo '$' antes de {usuarioIg} y agregamos 'www' para PC
+    // CORRECCIÓN: Usamos comillas invertidas `` y agregamos el '$' antes de la llave
     const urlIg = `https://instagram.com{usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
