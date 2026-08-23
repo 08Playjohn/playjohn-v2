@@ -13,7 +13,17 @@ function abrirIgPlayJohn() {
     window.open(urlIg, "_blank");
 }
 
-// ====== SISTEMA DE CONFIGURACIÓN DE CARRITO ======
+// ====== LÓGICA DE CONTROL DEL CARRITO LATERAL ======
+function toggleCarritoLateral() {
+    const sidebar = document.getElementById('carrito-lateral');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+        if (sidebar.classList.contains('open')) {
+            renderizarItemsCarrito();
+        }
+    }
+}
+
 function obtenerCarrito() {
     const carrito = localStorage.getItem('carrito_playjohn');
     return carrito ? JSON.parse(carrito) : [];
@@ -40,7 +50,74 @@ function agregarAlCarrito(id, nombre, precio) {
     
     localStorage.setItem('carrito_playjohn', JSON.stringify(carrito));
     actualizarGloboCarrito();
-    alert(`¡${nombre} agregado al carrito!`);
+    renderizarItemsCarrito();
+    
+    // Abrimos el carrito automáticamente al comprar para mostrar la acción
+    document.getElementById('carrito-lateral').classList.add('open');
+}
+
+function eliminarDelCarrito(id) {
+    let carrito = obtenerCarrito();
+    carrito = carrito.filter(item => item.id !== id);
+    localStorage.setItem('carrito_playjohn', JSON.stringify(carrito));
+    actualizarGloboCarrito();
+    renderizarItemsCarrito();
+}
+
+// ====== DIBUJAR LOS ELEMENTOS DENTRO DEL MENÚ LATERAL ======
+function renderizarItemsCarrito() {
+    const contenedorItems = document.getElementById('cart-items-container');
+    const contenedorTotal = document.getElementById('cart-total-value');
+    if (!contenedorItems || !contenedorTotal) return;
+
+    const carrito = obtenerCarrito();
+    contenedorItems.innerHTML = '';
+    let totalAcumulado = 0;
+
+    if (carrito.length === 0) {
+        contenedorItems.innerHTML = `<p style="color: #666; text-align: center; padding-top: 30px;">Tu carrito está vacío.</p>`;
+        contenedorTotal.innerText = "$ 0";
+        return;
+    }
+
+    carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        totalAcumulado += subtotal;
+
+        const filaHTML = `
+            <div class="cart-item-row">
+                <div class="cart-item-details">
+                    <h4>${item.nombre} (x${item.cantidad})</h4>
+                    <p>${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}</p>
+                </div>
+                <button type="button" class="remove-item-btn" onclick="eliminarDelCarrito('${item.id}')">✕</button>
+            </div>
+        `;
+        contenedorItems.innerHTML += filaHTML;
+    });
+
+    contenedorTotal.innerText = totalAcumulado.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+}
+
+// ====== ENVIAR EL PEDIDO DETALLADO A TU WHATSAPP DIRECTO ======
+function enviarPedidoWhatsApp() {
+    const carrito = obtenerCarrito();
+    if (carrito.length === 0) return alert("Tu carrito está vacío.");
+
+    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero coordinar la compra de los siguientes productos:\n\n";
+    let total = 0;
+
+    carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
+    });
+
+    mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
+    mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
+
+    const urlFinal = "https://whatsapp.com5491141701483&text=" + encodeURIComponent(mensaje);
+    window.open(urlFinal, "_blank");
 }
 
 // ====== CONECTOR DIRECTO CON TU MACRO DE GOOGLE DRIVE (JSON) ======
@@ -52,20 +129,14 @@ async function cargarProductosDesdeDrive() {
         const respuesta = await fetch(URL_DRIVE_JSON);
         const productosLista = await respuesta.json();
         
-        console.log("Conexión exitosa. Catálogo recibido.");
-        
-        // Guardamos de forma global para poder filtrar sin volver a hacer fetch
         window.productosGuardadosGlobal = productosLista;
-        
-        // Inicializamos mostrando "todos" los productos
         renderizarProductosEnPantalla(productosLista, "todos");
-        
     } catch (error) {
         console.error("Error crítico al leer datos desde Google Drive:", error);
     }
 }
 
-// ====== RENDERIZADOR MEJORADO CON FILTROS DINÁMICOS Y TEXTO COMPLETO ======
+// ====== RENDERIZADOR COMPATIBLE CON TU PALETA OSCURA ======
 function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
@@ -76,15 +147,11 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     productos.forEach((producto, index) => {
         if (!producto || !producto.categoria || !producto.nombre) return;
 
-        // Estandarizamos la categoría que viene de tu planilla Excel
         const catFormateada = producto.categoria.toLowerCase().trim();
         const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
-        
         let categoriaAsignada = listaConsolas.includes(catFormateada) ? "consolas" : "computacion";
         
-        // Filtro lógico: si el filtro es 'todos', pasa. Si no, debe coincidir exactamente
         if (filtroSeleccionado === "todos" || categoriaAsignada === filtroSeleccionado) {
-            
             const prodId = producto.id ? producto.id : `drive_${index}`;
             const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
             const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
@@ -116,19 +183,13 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     }
 }
 
-// ====== FUNCIÓN PARA DISPARAR LOS BOTONES DE FILTRADO EN PANTALLA ======
 function filtrarCatalogo(categoria) {
     if (!window.productosGuardadosGlobal) return;
-    
-    // Cambiamos el estado de los botones visuales
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
-    
-    // Renderizamos la grilla con el nuevo filtro aplicado
     renderizarProductosEnPantalla(window.productosGuardadosGlobal, categoria);
 }
 
-// ====== BUSCADOR ASINCRÓNICO GLOBAL ======
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
     const searchButtons = document.querySelectorAll('.search-btn');
@@ -137,7 +198,6 @@ function inicializarBuscadorGlobal() {
         const busqueda = texto.trim().toLowerCase();
         if (busqueda === '' || !window.productosGuardadosGlobal) return;
 
-        // Filtramos de forma dinámica en la pantalla actual los nombres que coincidan
         const productosEncontrados = window.productosGuardadosGlobal.filter(p => p.nombre.toLowerCase().includes(busqueda));
         renderizarProductosEnPantalla(productosEncontrados, "todos");
     }
@@ -150,11 +210,10 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// ====== INICIALIZADOR AL CARGAR LA PÁGINA ======
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Catálogo Inteligente Unificado para 08 Play John inicializado.");
     actualizarGloboCarrito();
     inicializarBuscadorGlobal();
     cargarProductosDesdeDrive();
 });
+
 
