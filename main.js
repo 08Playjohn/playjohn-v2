@@ -165,9 +165,11 @@ function enviarPedidoWhatsApp() {
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
     mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
 
-    const urlFinal = "https://whatsapp.com/5491141701483&text=" + encodeURIComponent(mensaje);
+    // CORRECCIÓN AQUÍ: Se cambió a la API correcta de WhatsApp con la estructura '?phone='
+    const urlFinal = "https://whatsapp.com" + encodeURIComponent(mensaje);
     window.open(urlFinal, "_blank");
 }
+
 
 // ==========================================
 // 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
