@@ -280,3 +280,25 @@ body {
     width: 32px;
     height: 32px;
 }
+/* Cambia el color del 08 en el texto del logotipo */
+.logo-highlight {
+    color: #e50914; /* Rojo vibrante estilo gamer */
+    font-weight: bold;
+}
+
+/* Alinea el bloque de redes en horizontal si se desordenan */
+.social-block {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espacio uniforme entre el título y los iconos */
+}
+
+/* Espaciado para los enlaces de los iconos */
+.social-icon {
+    display: inline-block;
+    transition: transform 0.2s ease; /* Efecto sutil al pasar el mouse */
+}
+
+.social-icon:hover {
+    transform: scale(1.1); /* Agranda ligeramente el icono al pasar el mouse */
+}
