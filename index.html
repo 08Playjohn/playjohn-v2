@@ -87,14 +87,23 @@
             <button class="carousel-arrow next-arrow">❯</button>
         </div>
     </main>
-    <!-- SECCIÓN DONDE SE INSERTARÁN LAS TARJETAS GAMER -->
+        <!-- SECCIÓN DE PRODUCTOS CON FILTRADO INCORPORADO -->
     <section class="products-section">
+        
+        <!-- Barra de Botones de Filtrado Gamer -->
+        <div class="filter-container-bar">
+            <button type="button" class="filter-btn active" onclick="filtrarCatalogo('todos')">🕹️ Ver Todo</button>
+            <button type="button" class="filter-btn" onclick="filtrarCatalogo('consolas')">🎮 Consolas</button>
+            <button type="button" class="filter-btn" onclick="filtrarCatalogo('computacion')">🖥️ Computación</button>
+        </div>
+
         <div class="products-container">
             <div class="products-grid">
-                <!-- El main.js se encargará de inyectar las tarjetas acá dentro -->
+                <!-- Las tarjetas inteligentes se inyectarán aquí -->
             </div>
         </div>
     </section>
+
 
     <!-- 4. BARRA DE CONFIANZA -->
     <section class="trust-bar">
