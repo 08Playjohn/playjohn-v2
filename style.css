@@ -1,17 +1,34 @@
 /* ==========================================
-   RESET GENERAL Y TIPOGRAFÍA
+   1. RESET GENERAL Y TIPOGRAFÍA GAMER
    ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
 body {
-    background-color: #0d0d0d;
+    background-color: #0d0d0d !important;
     color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
+    /* CALIBRADO: Ajustamos el espacio exacto para que el banner 
+       de Sonic empiece justo abajo de la barra de filtros */
+    padding-top: 135px !important; 
+}
+
+/* ==========================================
+   2. CABECERA FIJA Y MAESTRA (STICKY BLOCK)
+   ========================================== */
+.contenedor-fijo-superior {
+    position: fixed !important;
+    top: 0 !important; /* CORRECCIÓN CLAVE: Clava el menú al ras del techo de la pantalla */
+    left: 0 !important;
+    width: 100%;
+    z-index: 99999 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
 }
 
 /* ==========================================
