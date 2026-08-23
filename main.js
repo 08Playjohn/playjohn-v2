@@ -156,21 +156,29 @@ function inicializarBuscadorGlobal() {
     });
 }
 
-// Carga inicial
-document.addEventListener('DOMContentLoaded', () => {
-    actualizarGloboCarrito();
-    cargarProductosDesdeDrive();
-    inicializarBuscadorGlobal();
+// Asegura que el código se ejecute solo cuando la página cargue por completo
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Sistema de redirección de 08 Play John activado de forma segura.");
 });
-// 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
+
+// Función definitiva e inmune para abrir WhatsApp
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     const urlWpp = "https://whatsapp.com" + telefono + "&text=" + encodeURIComponent(mensaje);
     
-    // Abre en una nueva pestaña de forma segura
+    // Forzamos al navegador a abrir exactamente la URL procesada
     window.open(urlWpp, "_blank");
 }
+
+// Función definitiva e inmune para abrir Instagram
+function abrirIgPlayJohn() {
+    const urlIg = "https://instagram.com";
+    
+    // Forzamos al navegador a abrir exactamente la URL procesada
+    window.open(urlIg, "_blank");
+}
+
 
 // 1. FUNCIÓN PARA ABRIR EL WHATSAPP DIRECTO DE PLAY JOHN
 function abrirWppPlayJohn() {
