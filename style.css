@@ -20,13 +20,13 @@ body {
 .top-bar {
     background-color: #000000;
     font-size: 11px;
-    padding: 8px 4%;
+    padding: 0px 4%; /* CORREGIDO: Bajamos de 8px a 0px para eliminar la altura muerta */
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #1a1a1a;
+    min-height: 5px; /* Controla que no colapse por completo si hay texto oculto */
 }
-
 .top-bar-brands {
     display: flex;
     gap: 15px;
@@ -43,11 +43,10 @@ body {
    ========================================== */
 .main-header {
     background-color: #0b0b0c;
-    padding: 15px 4%;
+    padding: 8px 4%; /* CORREGIDO: Reducido de 15px a 8px para pegar el logo al borde superior */
     border-bottom: 2px solid #8c00ff;
     width: 100%;
 }
-
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -800,4 +799,28 @@ body {
     body {
         padding-top: 280px; /* Un poco más de aire en celulares ya que el menú se estira */
     }
+/* Ajustes específicos para pantallas de celulares */
+@media (max-width: 768px) {
+    .top-bar {
+        display: none; /* Esconde la barra superior vacía en celulares para ganar pantalla */
+    }
+    
+    .header-container {
+        flex-direction: column; /* Apila el logo, buscador e iconos uno abajo del otro */
+        gap: 12px;
+        padding: 5px 0;
+    }
+
+    .search-area {
+        max-width: 100%; /* El buscador se estira al ancho total del celular */
+        width: 100%;
+        order: 3; /* Pasa el buscador abajo de todo para que sea cómodo de clickear */
+    }
+    
+    .right-actions {
+        width: 100%;
+        justify-content: space-around; /* Distribuye las redes y el carrito de forma simétrica */
+        order: 2;
+    }
+}
 
