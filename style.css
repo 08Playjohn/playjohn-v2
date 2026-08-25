@@ -1,8 +1,8 @@
 /* ==========================================
-   RESET GENERAL Y TIPOGRAFÍA (CORREGIDO)
+   RESET GENERAL Y TIPOGRAFÍA
    ========================================== */
 * {
-    margin: 0 !important;   /* Fuerzas a eliminar márgenes residuales en PC */
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -12,16 +12,13 @@ body {
     color: #ffffff;
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
-    margin-top: 0 !important;    /* Asegura el inicio al borde de la pantalla */
-    padding-top: 0 !important;   /* Elimina cualquier relleno invisible del body */
 }
 
-/* ==========================================
-   BARRA SUPERIOR (TOP BAR - DESACTIVADA)
-   ========================================== */
+/* Forzamos a la barra superior muerta a no ocupar espacio */
 .top-bar {
-    display: none !important; /* Apaga por completo el contenedor vacío */
+    display: none !important;
 }
+
 
 /* ==========================================
    BARRA SUPERIOR (TOP BAR)
