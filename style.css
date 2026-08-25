@@ -741,38 +741,11 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 /* Configuración del logo gigante */
 .header-logo-img {
     width: auto;
-    height: 120px !important; /* 🔥 AJUSTADO: Subido a 120px reales para que impacte en la PC */
+    height: 120px !important; /* Mantiene tu logo imponente en la PC */
     object-fit: contain; 
     display: block;
     filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.7));
 }
-
-
-/* Ajuste de arranque para el contenido de abajo */
-body {
-    padding-top: 150px !important; 
-    background-color: #0d0d0d;
-}
-
-@media (max-width: 900px) {
-    .main-header {
-        flex-direction: column;
-        padding-top: 80px !important;
-    }
-    .logo-brand-box {
-        position: relative;
-        left: 0;
-        transform: none;
-        margin: 0 auto 15px auto;
-    }
-    .logo-brand-box:hover {
-        transform: scale(1.03);
-    }
-    body {
-        padding-top: 280px !important;
-    }
-}
-
 
 /* ==========================================
    BLOQUEO Y FIJACIÓN DE CABECERA (STICKY HEADER)
@@ -782,39 +755,48 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 999; /* Asegura que quede siempre por encima de las fotos de los productos */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Sombra gamer oscura para separarlo del catálogo */
+    z-index: 999; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); 
 }
 
-/* Compensación de espacio obligatorio para el cuerpo de la página */
+/* Compensación de espacio unificada para el cuerpo de la página */
 body {
-    /* Como la cabecera ahora flota, le damos un margen al cuerpo 
-       para que los productos arranquen abajo y no se tapen al cargar la web */
-    padding-top: 240px; 
+    background-color: #0d0d0d;
+    color: #ffffff;
+    /* CORREGIDO: Un solo colchón perfecto de 150px para dar espacio al logo gigante en PC */
+    padding-top: 150px !important; 
 }
 
 /* ==========================================
-   AJUSTES ESPECÍFICOS PARA CELULARES (CORREGIDO)
+   AJUSTES RESPONSIVE PARA PANTALLAS DE CELULARES
    ========================================== */
-@media (max-width: 768px) {
-    body {
-        padding-top: 0px; /* CORREGIDO: Eliminamos el empuje exagerado hacia abajo */
-    }
-
-    .top-bar {
-        display: none; /* Esconde la barra superior vacía en celulares */
+@media (max-width: 900px) {
+    .main-header {
+        flex-direction: column;
+        padding: 15px 4% !important;
+        height: auto !important; /* Permite al menú crecer hacia abajo en el celular */
     }
     
     .header-container {
-        flex-direction: column; /* Apila logo, buscador e iconos en vertical */
+        flex-direction: column;
+        height: auto !important;
         gap: 12px;
-        padding: 15px 0;
-        height: auto; /* IMPORTANTE: Permite que el menú crezca para abajo en el celular */
+        padding: 5px 0;
+    }
+    
+    .header-logo-img {
+        height: 60px !important; /* Achica el logo en el celular para que no tape toda la pantalla */
+    }
+    
+    .logo-brand-box {
+        position: relative;
+        left: 0;
+        transform: none;
+        margin: 0 auto;
     }
 
-    .logo-text {
-        font-size: 26px; /* CORREGIDO: Achica el logo gigante en móvil para que no se corte */
-        text-align: center;
+    .top-bar {
+        display: none; 
     }
 
     .search-area {
@@ -825,7 +807,12 @@ body {
     
     .right-actions {
         width: 100%;
-        justify-content: space-around; /* Distribuye redes y carrito simétricamente */
+        justify-content: space-around; 
         order: 2;
+    }
+    
+    body {
+        /* CORREGIDO: Ajusta el espacio del cuerpo en celulares ya que el menú se apila verticalmente */
+        padding-top: 200px !important; 
     }
 }
