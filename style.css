@@ -53,6 +53,10 @@ body {
     border-bottom: 2px solid #8c00ff;
     width: 100%;
 }
+   /* SOLUCIÓN ANTI-EXTENSIONES: Clava el menú arriba de todo */
+    position: relative;
+    z-index: 9999;
+}
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
