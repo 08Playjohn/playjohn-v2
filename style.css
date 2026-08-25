@@ -49,14 +49,15 @@ body {
    ========================================== */
 .main-header {
     background-color: #0b0b0c;
-    padding: 8px 4%; /* CORREGIDO: Reducido de 15px a 8px para pegar el logo al borde superior */
+    padding: 0 4%; /* Ajustado a 0 para que la altura la maneje el contenedor */
     border-bottom: 2px solid #8c00ff;
     width: 100%;
-}
-   /* SOLUCIÓN ANTI-EXTENSIONES: Clava el menú arriba de todo */
+    
+    /* CORREGIDO: Solución anti-extensiones integrada dentro de la clase correspondiente */
     position: relative;
     z-index: 9999;
 }
+
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -64,13 +65,19 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+    
+    /* CORREGIDO: Altura ajustada a 80px para que encaje el logo al doble de tamaño */
+    height: 80px; 
 }
 
 .logo-text {
     color: #e50914 !important; /* Rojo gamer para todo el texto */
     font-weight: bold;
     text-decoration: none;
-    font-size: 44px;
+    font-size: 44px; /* Tu logo al doble de tamaño mantenido */
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Evita que el texto largo se rompa en dos renglones */
 }
 
 .search-area {
@@ -78,6 +85,7 @@ body {
     max-width: 500px;
     display: flex;
     position: relative;
+    align-items: center; /* Centra el buscador verticalmente */
 }
 
 .search-area input {
@@ -105,7 +113,9 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+    height: 100%; /* Alinea verticalmente tus redes y carrito */
 }
+
 
 /* ==========================================
    BLOQUE DE REDES (UNIFICADO Y CORREGIDO)
@@ -804,33 +814,39 @@ body {
     padding-top: 240px; 
 }
 
-/* Ajuste técnico para pantallas de celulares */
+/* ==========================================
+   AJUSTES ESPECÍFICOS PARA CELULARES (CORREGIDO)
+   ========================================== */
 @media (max-width: 768px) {
     body {
-        padding-top: 280px; /* Un poco más de aire en celulares ya que el menú se estira */
+        padding-top: 0px; /* CORREGIDO: Eliminamos el empuje exagerado hacia abajo */
     }
-/* Ajustes específicos para pantallas de celulares */
-@media (max-width: 768px) {
+
     .top-bar {
-        display: none; /* Esconde la barra superior vacía en celulares para ganar pantalla */
+        display: none; /* Esconde la barra superior vacía en celulares */
     }
     
     .header-container {
-        flex-direction: column; /* Apila el logo, buscador e iconos uno abajo del otro */
+        flex-direction: column; /* Apila logo, buscador e iconos en vertical */
         gap: 12px;
-        padding: 5px 0;
+        padding: 15px 0;
+        height: auto; /* IMPORTANTE: Permite que el menú crezca para abajo en el celular */
+    }
+
+    .logo-text {
+        font-size: 26px; /* CORREGIDO: Achica el logo gigante en móvil para que no se corte */
+        text-align: center;
     }
 
     .search-area {
-        max-width: 100%; /* El buscador se estira al ancho total del celular */
+        max-width: 100%; 
         width: 100%;
-        order: 3; /* Pasa el buscador abajo de todo para que sea cómodo de clickear */
+        order: 3; /* Pasa el buscador abajo de todo */
     }
     
     .right-actions {
         width: 100%;
-        justify-content: space-around; /* Distribuye las redes y el carrito de forma simétrica */
+        justify-content: space-around; /* Distribuye redes y carrito simétricamente */
         order: 2;
     }
 }
-
