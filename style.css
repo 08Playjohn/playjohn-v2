@@ -1,27 +1,8 @@
-/* 1. Elimina márgenes ocultos del navegador */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* 2. Asegura que el cuerpo de la página empiece bien arriba */
-body {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-
-/* 3. Si tienes una barra superior vacía que no usas, desactívala en PC */
-.top-bar {
-    display: none !important; /* Quita por completo la franja negra superior */
-}
-
-
 /* ==========================================
-   RESET GENERAL Y TIPOGRAFÍA
+   RESET GENERAL Y TIPOGRAFÍA (CORREGIDO)
    ========================================== */
 * {
-    margin: 0;
+    margin: 0 !important;   /* Fuerzas a eliminar márgenes residuales en PC */
     padding: 0;
     box-sizing: border-box;
 }
@@ -31,6 +12,15 @@ body {
     color: #ffffff;
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
+    margin-top: 0 !important;    /* Asegura el inicio al borde de la pantalla */
+    padding-top: 0 !important;   /* Elimina cualquier relleno invisible del body */
+}
+
+/* ==========================================
+   BARRA SUPERIOR (TOP BAR - DESACTIVADA)
+   ========================================== */
+.top-bar {
+    display: none !important; /* Apaga por completo el contenedor vacío */
 }
 
 /* ==========================================
