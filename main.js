@@ -7,7 +7,7 @@ function abrirWppPlayJohn() {
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
     // CORREGIDO: Se usa ${telefono} y se eliminan las llaves fijas de la URL
-    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
+    const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
@@ -153,7 +153,7 @@ function enviarPedidoWhatsApp() {
     const telefono = "5491141701483";
     
     // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
-    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
+    const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     
     window.open(urlFinal, "_blank");
 }
