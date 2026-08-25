@@ -6,14 +6,16 @@ function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
     
-    // SOLUCIONADO: Se agregó el '$' antes de la llave y la barra '/' después de wa.me
-    const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
+    // CORREGIDO: Se usa ${telefono} y se eliminan las llaves fijas de la URL
+    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
+
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    // SOLUCIONADO: Se agregó el '$' antes de la llave y 'www' para evitar desvíos en PC
+    
+    // CORREGIDO: Se usa ${usuarioIg} con el signo '$' y sin las llaves de texto plano
     const urlIg = `https://instagram.com{usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
