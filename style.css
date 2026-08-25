@@ -690,16 +690,16 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
    ========================================== */
 .main-header {
     background-color: #0b0b0c;
-    padding: 10px 4% !important; /* Mantiene la barra delgada y fina */
+    padding: 0 4% !important; /* CORREGIDO: Dejamos el padding vertical en 0 para que no aplaste el logo */
     border-bottom: 2px solid #8c00ff;
     width: 100%;
-    position: relative; /* Base para el logo flotante */
-    min-height: 70px;
+    position: relative; 
     display: flex;
     align-items: center;
+    /* CORREGIDO: Eliminamos min-height: 70px que actuaba como tope limitador */
 }
 
-/* Contenedor estándar: Ya no tiene el colchón que empujaba la barra blanca */
+/* Contenedor estándar unificado */
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -709,28 +709,28 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
     gap: 20px;
     width: 100%;
     position: relative;
+    height: auto; /* Permite que la barra tome la altura real del logo gigante */
+    padding: 8px 0; /* Un pequeño margen interno simétrico para que respire el diseño */
 }
 
 /* El Buscador se centra de manera perfecta en el medio de la pantalla */
 .search-area {
     flex: 1;
     max-width: 500px;
-    margin: 0 auto; /* Centrado automático exacto */
+    margin: 0 auto; 
     display: flex;
     position: relative;
     z-index: 10;
 }
 
 /* ==========================================
-   CONFIGURACIÓN DEL LOGO (CORREGIDO)
+   CONFIGURACIÓN DEL LOGO
    ========================================== */
-/* Caja del logo: vuelve al flujo normal para empujar y acomodar la barra */
 .logo-brand-box {
     display: flex;
     align-items: center;
     text-decoration: none;
     z-index: 1000;
-    /* CORREGIDO: Eliminamos absolute, top y transform que causaban el espacio vacío */
     transition: transform 0.2s ease;
 }
 
@@ -741,22 +741,10 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 /* Configuración del logo gigante */
 .header-logo-img {
     width: auto;
-    height: 100px !important; /* Ajustado a 100px para PC; si lo quieres más grande ponle 130px */
+    height: 120px !important; /* 🔥 AJUSTADO: Subido a 120px reales para que impacte en la PC */
     object-fit: contain; 
     display: block;
     filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.7));
-}
-
-/* Ajuste necesario en el contenedor para que acompañe el tamaño del logo */
-.header-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    height: auto; /* IMPORTANTE: Deja que el alto se adapte automáticamente al logo */
-    padding: 10px 0; /* Agrega un pequeño margen interno simétrico arriba y abajo */
 }
 
 
