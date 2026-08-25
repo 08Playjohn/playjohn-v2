@@ -16,7 +16,7 @@ function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
     
     // CORREGIDO: Se usa ${usuarioIg} con el signo '$' y sin las llaves de texto plano
-    const urlIg = `https://instagram.com{usuarioIg}/`; 
+    const urlIg = `https://instagram.com/${usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
 
