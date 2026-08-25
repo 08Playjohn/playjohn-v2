@@ -152,11 +152,12 @@ function enviarPedidoWhatsApp() {
 
     const telefono = "5491141701483";
     
-    // SOLUCIONADO: Se agregó el '$' antes de la llave y la barra '/' para enviar el carrito de forma segura
-    const urlFinal = `https://wa.me{telefono}?text=${encodeURIComponent(mensaje)}`;
+    // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
+    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
     
     window.open(urlFinal, "_blank");
 }
+
 
 
 
