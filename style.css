@@ -50,7 +50,7 @@ body {
     color: #e50914 !important; 
     font-weight: bold;
     text-decoration: none;
-    font-size: 44px !important; /* El !important obliga al logo a duplicar su tamaño */
+    font-size: 166px !important; /* El !important obliga al logo modificar su tamaño */
     display: flex;
     align-items: center;
     white-space: nowrap; 
