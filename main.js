@@ -152,13 +152,12 @@ function enviarPedidoWhatsApp() {
     }
 
     // 2. 🏠 Pedimos la Dirección de forma OPCIONAL
-    let direccionCliente = prompt("Ingresá tu Dirección de envío (Opcional):");
-    if (!direccionCliente) direccionCliente = "No especificada (Retira en local)";
+    let direccionCliente = prompt("Ingresá tu Dirección por favor (Opcional):");
+    if (!direccionCliente) direccionCliente = "No especificada por el cliente";
 
     // 3. 📝 Armamos el encabezado del mensaje con los datos del cliente
     let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
     mensaje += `Hola, soy: *${nombreCliente.trim()}*\n`;
-    mensaje += `📌 *Nombre y Apellido:* ${nombreCliente.trim()}\n`;
     mensaje += `📌 *Dirección de cliente:* ${direccionCliente.trim()}\n\n`;
     mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
 
