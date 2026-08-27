@@ -138,7 +138,30 @@ function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    let mensaje = "🛒 *NUEVO PEDIDO - 08 PLAY JOHN*\n\nHola! Quiero coordinar la compra de los siguientes productos:\n\n";
+    // 1. 🛑 Pedimos el Nombre y Apellido de forma OBLIGATORIA
+    let nombreCliente = "";
+    while (!nombreCliente || nombreCliente.trim() === "") {
+        nombreCliente = prompt("Por favor, ingresá tu Nombre y Apellido para continuar con el pedido:");
+        
+        // Si el cliente cancela el prompt, detenemos la ejecución de la función
+        if (nombreCliente === null) return; 
+        
+        if (!nombreCliente.trim()) {
+            alert("El Nombre y Apellido es obligatorio para procesar el pedido.");
+        }
+    }
+
+    // 2. 🏠 Pedimos la Dirección de forma OPCIONAL
+    let direccionCliente = prompt("Ingresá tu Dirección de envío (Opcional - Dejá en blanco si retiras):");
+    if (!direccionCliente) direccionCliente = "No especificada (Retira en local)";
+
+    // 3. 📝 Armamos el encabezado del mensaje con los datos del cliente
+    let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
+    mensaje += `Hola, soy: *${nombreCliente.trim()}*\n`;
+    mensaje += `📌 *Nombre y Apellido:* ${nombreCliente.trim()}\n`;
+    mensaje += `📌 *Dirección de envío:* ${direccionCliente.trim()}\n\n`;
+    mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
+
     let total = 0;
 
     carrito.forEach(item => {
