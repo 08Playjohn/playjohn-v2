@@ -134,44 +134,66 @@ function renderizarItemsCarrito() {
     contenedorTotal.innerText = totalAcumulado.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
 }
 
+// 1. Esta función ahora solo abre el formulario visual
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    // 1. 🛑 Pedimos el Nombre y Apellido de forma OBLIGATORIA
-    let nombreCliente = "";
-    while (!nombreCliente || nombreCliente.trim() === "") {
-        nombreCliente = prompt("Por favor, ingresá tu Nombre y Apellido para continuar con el pedido:");
-        
-        // Si el cliente cancela el prompt, detenemos la ejecución de la función
-        if (nombreCliente === null) return; 
-        
-        if (!nombreCliente.trim()) {
-            alert("El Nombre y Apellido es obligatorio para procesar el pedido.");
-        }
+    // Limpiamos los campos del formulario por si quedaron datos viejos
+    document.getElementById('form-nombre').value = '';
+    document.getElementById('form-direccion').value = '';
+
+    // Mostramos el formulario flotante con estilo flex para centrarlo
+    const modal = document.getElementById('modal-formulario-cliente');
+    if (modal) modal.style.display = 'flex';
+}
+
+// 2. Función para cerrar el formulario si se arrepienten
+function cerrarFormularioCliente() {
+    const modal = document.getElementById('modal-formulario-cliente');
+    if (modal) modal.style.display = 'none';
+}
+
+// 3. Esta función valida los datos juntos y genera el mensaje de WhatsApp definitivo
+function procesarFormularioYEnviar() {
+    const nombreInput = document.getElementById('form-nombre').value.trim();
+    let direccionInput = document.getElementById('form-direccion').value.trim();
+
+    // Validación: Si el nombre está vacío, frena el envío
+    if (!nombreInput) {
+        alert("Por favor, ingresá tu Nombre y Apellido para continuar.");
+        return;
     }
 
-    // 2. 🏠 Pedimos la Dirección de forma OPCIONAL
-    let direccionCliente = prompt("Ingresá tu Dirección por favor (Opcional):");
-    if (!direccionCliente) direccionCliente = "No especificada por el cliente";
+    // Si la dirección queda vacía, le asignamos el texto por defecto
+    if (!direccionInput) {
+        direccionInput = "No especificada por el cliente";
+    }
 
-    // 3. 📝 Armamos el encabezado del mensaje con los datos del cliente
-    let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
-    mensaje += `Hola, soy: *${nombreCliente.trim()}*\n`;
-    mensaje += `📌 *Dirección de cliente:* ${direccionCliente.trim()}\n\n`;
-    mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
-
+    const carrito = obtenerCarrito();
     let total = 0;
 
+    // 📝 Armamos el encabezado limpio (No repite el nombre dos veces)
+    let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
+    mensaje += `Hola, soy: *${nombreInput}*\n`;
+    mensaje += `📌 *Dirección de cliente:* ${direccionInput}\n\n`;
+    mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
+
+    // 📦 Recorremos los productos del carrito
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
         mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
     });
 
-    mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
-    
+    // 💰 Sumamos el cierre del mensaje, el total y la pregunta de stock
+    mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
+    mensaje += `\n¿Tienen disponibilidad de stock para confirmar el pago?`;
+
     const telefono = "5491141701483";
+    
+    // Ocultamos el formulario flotante antes de saltar a WhatsApp
+    cerrarFormularioCliente();
     
     // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
     const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
