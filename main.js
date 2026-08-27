@@ -148,12 +148,7 @@ function enviarPedidoWhatsApp() {
     });
 
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n\n`;
-    mensaje += "¿Tienen disponibilidad de stock para confirmar el pago?";
-
-    mensaje += "\n\n*Por favor, indicame tus datos:*";
-    mensaje += "\n📌 *Nombre y Apellido:* ";
-    mensaje += "\n📌 **Dirección de envío (opcional):**`";
-
+    
     const telefono = "5491141701483";
     
     // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
