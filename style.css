@@ -56,12 +56,14 @@ body {
     white-space: nowrap; 
 }
 
-/* Ponelo justo acá abajo 👇 */
-.logo-text img {
-    height: 50px; /* Si ves el logo muy chico, subí este número (ej. 60px o 70px) */
+/* Reemplaza el bloque anterior por este corregido 👇 */
+.header-logo-img {
+    height: 45px !important; /* Ajusta la altura justa del logo dentro de los 80px */
     width: auto;
+    display: block;
     object-fit: contain;
 }
+
 
 .search-area {
     flex: 1;
