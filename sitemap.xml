@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="https://sitemaps.org">
+<urlset xmlns="https://sitemap.org">
   <url>
     <loc>https://08playjohn.com.ar</loc>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://08playjohn.com.arcomputacion.html</loc>
+    <loc>https://08playjohn.com.ar/computacion.html</loc>
     <priority>0.80</priority>
   </url>
   <url>
