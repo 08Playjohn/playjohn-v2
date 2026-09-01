@@ -50,10 +50,17 @@ body {
     color: #e50914 !important; 
     font-weight: bold;
     text-decoration: none;
-    font-size: 166px !important; /* El !important obliga al logo modificar su tamaño */
+    font-size: 28px !important; /* Recordá bajar este número aquí */
     display: flex;
     align-items: center;
     white-space: nowrap; 
+}
+
+/* Ponelo justo acá abajo 👇 */
+.logo-text img {
+    height: 50px; /* Si ves el logo muy chico, subí este número (ej. 60px o 70px) */
+    width: auto;
+    object-fit: contain;
 }
 
 .search-area {
