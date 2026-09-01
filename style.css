@@ -25,7 +25,7 @@ body {
 }
 
 /* ==========================================
-   HEADER PRINCIPAL (ESTILO FULLH4RD)
+   HEADER PRINCIPAL (ESTILO REPARADO)
    ========================================== */
 .main-header {
     background-color: #0b0b0c;
@@ -34,6 +34,9 @@ body {
     width: 100%;
     position: relative;
     z-index: 9999;
+    /* Eliminamos alturas fijas conflictivas del contenedor padre */
+    height: auto !important; 
+    min-height: 80px;
 }
 
 .header-container {
@@ -43,27 +46,16 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    height: 80px; /* Clava la altura justa en PC para el logo grande */
+    padding: 15px 0; /* Controlamos el alto con espacio interno real */
 }
 
-.logo-text {
-    color: #e50914 !important; 
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 28px !important; /* Recordá bajar este número aquí */
-    display: flex;
-    align-items: center;
-    white-space: nowrap; 
-}
-
-/* Reemplaza el bloque anterior por este corregido 👇 */
+/* Forzamos a que la imagen del logo use un tamaño amigable */
 .header-logo-img {
-    height: 45px !important; /* Ajusta la altura justa del logo dentro de los 80px */
-    width: auto;
+    height: 45px !important;
+    width: auto !important;
     display: block;
     object-fit: contain;
 }
-
 
 .search-area {
     flex: 1;
