@@ -766,7 +766,6 @@ body {
     padding-top: 80px !important; 
 }
 
-
 /* ==========================================
    AJUSTES RESPONSIVE PARA PANTALLAS DE CELULARES
    ========================================== */
@@ -816,3 +815,206 @@ body {
         padding-top: 200px !important; 
     }
 }
+/* ==========================================================================
+   VENTANA INTERACTIVA DE PRODUCTO FLOTANTE (MODAL)
+   ========================================================================== */
+
+/* 1. Fondo oscuro translúcido que cubre toda la pantalla */
+.modal-overlay {
+  display: none; /* Se mantiene oculto hasta que JS lo cambia a 'flex' */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Oscurece el fondo de tu web */
+  z-index: 99999; /* Se asegura de tapar menúes, carrusel y todo lo demás */
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+/* 2. Caja contenedora blanca con diseño de dos columnas */
+.modal-contenido-ampliado {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 820px; 
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  display: flex; 
+  overflow: hidden;
+  animation: modalFadeIn 0.25s ease-out;
+  box-sizing: border-box;
+}
+
+/* 3. Columna Izquierda: Espacio limpio para la foto */
+.modal-col-izquierda {
+  flex: 1;
+  background-color: #fcfcfc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  border-right: 1px solid #f0f0f0;
+}
+
+.modal-imagen {
+  max-width: 100%;
+  max-height: 290px;
+  object-fit: contain;
+}
+
+/* 4. Columna Derecha: Títulos, textos y botones */
+.modal-col-derecha {
+  flex: 1.2;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.modal-titulo {
+  font-family: sans-serif;
+  font-size: 20px;
+  color: #111111;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.modal-descripcion {
+  font-family: sans-serif;
+  font-size: 13.5px;
+  color: #555555;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+/* 5. Recuadro destacado para el Precio Especial */
+.modal-precio-contenedor {
+  background-color: #f4fbf6; 
+  border: 1px solid #25D366; /* Combina con tu verde de WhatsApp */
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-precio-etiqueta {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: #1ea951;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-precio-valor {
+  font-family: sans-serif;
+  font-size: 26px;
+  color: #1ea951;
+  font-weight: 800;
+  margin-top: 3px;
+}
+
+/* 6. Botón de agregar al carrito interno */
+.modal-btn-comprar {
+  background-color: #25D366; 
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.modal-btn-comprar:hover {
+  background-color: #1ea951;
+  transform: translateY(-1px);
+}
+
+.modal-btn-comprar:active {
+  transform: translateY(1px);
+}
+
+/* Animación de entrada para que no aparezca de golpe */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 7. Optimización y adaptación automática para Celulares */
+@media (max-width: 680px) {
+  .modal-contenido-ampliado {
+    flex-direction: column;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-col-izquierda {
+    padding: 15px;
+    background-color: #ffffff;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .modal-imagen {
+    max-height: 180px;
+  }
+  .modal-col-derecha {
+    padding: 20px;
+  }
+}
+/* ==========================================================================
+   ESTILOS NUEVOS PARA EL CARRUSEL DEL MODAL FLOTANTE
+   ========================================================================== */
+.modal-carousel-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-carousel-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+/* Flechas de navegación minimalistas flotando sobre los lados */
+.modal-carousel-arrow {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.1s;
+    z-index: 10;
+    user-select: none;
+}
+
+.modal-carousel-arrow:hover {
+    background-color: #25D366; /* Cambia a tu verde al pasar el mouse */
+}
+
+.modal-carousel-arrow:active {
+    transform: scale(0.9);
+}
+
+.modal-prev { left: 5px; }
+.modal-next { right: 5px; }
+
+

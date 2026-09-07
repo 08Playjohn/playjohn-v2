@@ -5,24 +5,94 @@
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    
-    // CORREGIDO: Se usa ${telefono} y se eliminan las llaves fijas de la URL
     const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
-
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    
-    // CORREGIDO: Se usa ${usuarioIg} con el signo '$' y sin las llaves de texto plano
     const urlIg = `https://instagram.com/${usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
 
+// ==========================================
+// 2. LÓGICA DE PREVISUALIZACIÓN DE PRODUCTO FLOTANTE
+// ==========================================
+
+let imagenesModalActuales = [];
+let indiceImagenModal = 0;
+
+function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
+    document.getElementById('modal-titulo').innerText = nombre;
+    document.getElementById('modal-descripcion').innerText = descripcion || "Sin descripción disponible.";
+    
+    const precioNumerico = parseFloat(precio) || 0;
+    document.getElementById('modal-precio').innerText = precioNumerico.toLocaleString('es-AR', { 
+        style: 'currency', 
+        currency: 'ARS', 
+        maximumFractionDigits: 0 
+    });
+    
+    const wrapper = document.getElementById('modal-carousel-wrapper');
+    if (wrapper) {
+        wrapper.innerHTML = ''; 
+        indiceImagenModal = 0;   
+
+        if (imagenUrl.includes(',')) {
+            imagenesModalActuales = imagenUrl.split(',').map(url => url.trim());
+        } else {
+            imagenesModalActuales = [imagenUrl.trim()];
+        }
+
+        imagenesModalActuales.forEach((url, index) => {
+            const imgElement = document.createElement('img');
+            imgElement.src = url;
+            imgElement.className = 'modal-imagen';
+            imgElement.onerror = function() { this.src = 'https://unsplash.com'; };
+            imgElement.style.display = index === 0 ? 'block' : 'none';
+            wrapper.appendChild(imgElement);
+        });
+    }
+
+    const flechas = document.querySelectorAll('.modal-carousel-arrow');
+    flechas.forEach(flecha => {
+        flecha.style.display = imagenesModalActuales.length > 1 ? 'flex' : 'none';
+    });
+    
+    const botonCompraModal = document.getElementById('modal-btn-comprar');
+    if (botonCompraModal) {
+        botonCompraModal.onclick = function(e) {
+            e.stopPropagation();
+            agregarAlCarrito(id, nombre, precioNumerico);
+            document.getElementById('producto-modal').style.display = 'none';
+        };
+    }
+
+    document.getElementById('producto-modal').style.display = 'flex';
+}
+
+function cambiarSlideModal(direccion) {
+    const imagenes = document.querySelectorAll('#modal-carousel-wrapper .modal-imagen');
+    if (imagenes.length <= 1) return;
+
+    imagenes[indiceImagenModal].style.display = 'none';
+
+    indiceImagenModal += direccion;
+    if (indiceImagenModal >= imagenes.length) { indiceImagenModal = 0; }
+    if (indiceImagenModal < 0) { indiceImagenModal = imagenes.length - 1; }
+
+    imagenes[indiceImagenModal].style.display = 'block';
+}
+
+function cerrarModalExterno(event) {
+    const modalOverlay = document.getElementById('producto-modal');
+    if (event.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+    }
+}
 
 // ==========================================
-// 2. LÓGICA INTERACTIVA DEL CARRITO
+// 3. LÓGICA INTERACTIVA DEL CARRITO
 // ==========================================
 
 function toggleCarritoLateral() {
@@ -48,7 +118,6 @@ function actualizarGloboCarrito() {
         badge.style.display = totalItems > 0 ? 'flex' : 'none';
     });
 }
-
 function agregarAlCarrito(id, nombre, precio) {
     let carrito = obtenerCarrito();
     const productoExistente = carrito.find(item => item.id === id);
@@ -133,39 +202,31 @@ function renderizarItemsCarrito() {
 
     contenedorTotal.innerText = totalAcumulado.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
 }
-
-// 1. Esta función ahora solo abre el formulario visual
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    // Limpiamos los campos del formulario por si quedaron datos viejos
     document.getElementById('form-nombre').value = '';
     document.getElementById('form-direccion').value = '';
 
-    // Mostramos el formulario flotante con estilo flex para centrarlo
     const modal = document.getElementById('modal-formulario-cliente');
     if (modal) modal.style.display = 'flex';
 }
 
-// 2. Función para cerrar el formulario si se arrepienten
 function cerrarFormularioCliente() {
     const modal = document.getElementById('modal-formulario-cliente');
     if (modal) modal.style.display = 'none';
 }
 
-// 3. Esta función valida los datos juntos y genera el mensaje de WhatsApp definitivo
 function procesarFormularioYEnviar() {
     const nombreInput = document.getElementById('form-nombre').value.trim();
     let direccionInput = document.getElementById('form-direccion').value.trim();
 
-    // Validación: Si el nombre está vacío, frena el envío
     if (!nombreInput) {
         alert("Por favor, ingresá tu Nombre y Apellido para continuar.");
         return;
     }
 
-    // Si la dirección queda vacía, le asignamos el texto por defecto
     if (!direccionInput) {
         direccionInput = "No especificada por el cliente";
     }
@@ -173,40 +234,29 @@ function procesarFormularioYEnviar() {
     const carrito = obtenerCarrito();
     let total = 0;
 
-    // 📝 Armamos el encabezado limpio (No repite el nombre dos veces)
     let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
     mensaje += `Hola, soy: *${nombreInput}*\n`;
     mensaje += `📌 *Dirección de cliente:* ${direccionInput}\n\n`;
     mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
 
-    // 📦 Recorremos los productos del carrito
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
         mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
     });
 
-    // 💰 Sumamos el cierre del mensaje, el total y la pregunta de stock
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
     mensaje += `\n¿Tienen disponibilidad de stock para confirmar el pago?`;
 
     const telefono = "5491141701483";
-    
-    // Ocultamos el formulario flotante antes de saltar a WhatsApp
     cerrarFormularioCliente();
     
-    // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
     const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
-    
     window.open(urlFinal, "_blank");
 }
 
-
-
-
-
 // ==========================================
-// 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
+// 4. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
 // ==========================================
 const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
 
@@ -242,10 +292,15 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
             const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
             const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
             const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
-            const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
+            
+            const imagenProd = producto.imagen ? producto.imagen.split(',')[0].trim() : "https://unsplash.com";
+
+            const nombreEscapado = producto.nombre.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const descEscapada = descripcionProd.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const imagenCompletaEscapada = producto.imagen ? producto.imagen.replace(/'/g, "\\'").replace(/"/g, '\\"') : "https://unsplash.com";
 
             contenedorGrid.innerHTML += `
-                <div class="product-card">
+                <div class="product-card" onclick="abrirProductoFlotante('${prodId}', '${nombreEscapado}', '${descEscapada}', ${precioLimpio}, '${imagenCompletaEscapada}')" style="cursor: pointer;">
                     <div class="product-img-box">
                         <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
                     </div>
@@ -253,7 +308,7 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
                         <h3 class="product-title">${producto.nombre}</h3>
                         <p class="product-description">${descripcionProd}</p>
                         <p class="product-price">${precioFormateado}</p>
-                        <button class="add-to-cart-btn" onclick="agregarAlCarrito('${prodId}', '${producto.nombre.replace(/'/g, "\\'")}', ${precioLimpio})">
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); agregarAlCarrito('${prodId}', '${nombreEscapado}', ${precioLimpio})">
                             🛒 COMPRAR
                         </button>
                     </div>
@@ -271,14 +326,14 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
 function filtrarCatalogo(categoria) {
     if (!window.productosGuardadosGlobal) return;
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    if (event && event.target) {
-        event.target.classList.add('active');
+    if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
     }
     renderizarProductosEnPantalla(window.productosGuardadosGlobal, categoria);
 }
 
 // ==========================================
-// 4. BUSCADOR GLOBAL Y REFRESCADO
+// 5. BUSCADOR GLOBAL Y REFRESCADO
 // ==========================================
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
@@ -296,13 +351,39 @@ function inicializarBuscadorGlobal() {
         btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
     });
 
-
-    searchButtons.forEach((btn, idx) => {
-        btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
-    });
     searchInputs.forEach(input => {
         input.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); ejecutarBusqueda(e.target.value); } });
     });
+}
+
+// ==========================================
+// 6. CONTROL DINÁMICO DEL CARRUSEL DE BANNERS
+// ==========================================
+let indiceSlideActual = 0;
+let intervaloCarrusel;
+
+function mostrarSlide(indice) {
+    const imagenes = document.querySelectorAll('.carousel-slide .carousel-img');
+    if (imagenes.length === 0) return;
+
+    if (indice >= imagenes.length) { indiceSlideActual = 0; }
+    else if (indice < 0) { indiceSlideActual = imagenes.length - 1; }
+    else { indiceSlideActual = indice; }
+
+    imagenes.forEach(img => img.style.display = 'none');
+    imagenes[indiceSlideActual].style.display = 'block';
+}
+
+function cambiarSlide(direccion) {
+    clearInterval(intervaloCarrusel);
+    mostrarSlide(indiceSlideActual + direccion);
+    iniciarRotacionAutomatica();
+}
+
+function iniciarRotacionAutomatica() {
+    intervaloCarrusel = setInterval(() => {
+        mostrarSlide(indiceSlideActual + 1);
+    }, 4000);
 }
 
 // ====== INICIALIZADOR AL CARGAR LA PÁGINA ======
@@ -312,41 +393,3 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarProductosDesdeDrive();
     iniciarRotacionAutomatica();
 });
-// ==========================================
-// 5. CONTROL DINÁMICO DEL CARRUSEL DE BANNERS
-// ==========================================
-let indiceSlideActual = 0;
-let intervaloCarrusel;
-
-function mostrarSlide(indice) {
-    const imagenes = document.querySelectorAll('.carousel-slide .carousel-img');
-    if (imagenes.length === 0) return;
-
-    // Manejo de bucle si se pasa del límite izquierdo o derecho
-    if (indice >= imagenes.length) { indiceSlideActual = 0; }
-    else if (indice < 0) { indiceSlideActual = imagenes.length - 1; }
-    else { indiceSlideActual = indice; }
-
-    // Ocultamos todas las imágenes y solo mostramos la activa
-    imagenes.forEach(img => img.style.display = 'none');
-    imagenes[indiceSlideActual].style.display = 'block';
-}
-
-function cambiarSlide(direccion) {
-    // Al hacer clic manual, reiniciamos el temporizador automático para que no salte rápido
-    clearInterval(intervaloCarrusel);
-    mostrarSlide(indiceSlideActual + direccion);
-    iniciarRotacionAutomatica();
-}
-
-function iniciarRotacionAutomatica() {
-    intervaloCarrusel = setInterval(() => {
-        mostrarSlide(indiceSlideActual + 1);
-    }, 4000); // Cambia de propaganda automáticamente cada 4 segundos
-}
-
-// Modificamos el inicializador DOMContentLoaded que ya tenés en tu main.js 
-// para que encienda el carrusel apenas cargue la web agregando:
-// iniciarRotacionAutomatica(); justo antes del cierre de la función.
-
-
