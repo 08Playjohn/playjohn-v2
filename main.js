@@ -5,13 +5,13 @@
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
+    const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    const urlIg = `https://instagram.com{usuarioIg}/`; 
+    const urlIg = `https://instagram.com/${usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
 
@@ -251,7 +251,7 @@ function procesarFormularioYEnviar() {
     const telefono = "5491141701483";
     cerrarFormularioCliente();
     
-    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
+    const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
