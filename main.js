@@ -5,21 +5,160 @@
 function abrirWppPlayJohn() {
     const telefono = "5491141701483";
     const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
-    
-    // CORREGIDO: Se usa ${telefono} y se eliminan las llaves fijas de la URL
     const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
 
-
 function abrirIgPlayJohn() {
     const usuarioIg = "08playjohn";
-    
-    // CORREGIDO: Se usa ${usuarioIg} con el signo '$' y sin las llaves de texto plano
     const urlIg = `https://instagram.com/${usuarioIg}/`; 
     window.open(urlIg, "_blank");
 }
 
+// ==========================================
+// NUEVO: LÓGICA DE PRODUCTO FLOTANTE (MODAL)
+// ==========================================
+
+// Esta función recibe los datos dinámicos desde tu loop de Google Drive
+function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
+    // 1. Inyectamos los textos e imágenes en los selectores del modal de tu HTML
+    document.getElementById('modal-titulo').innerText = nombre;
+    document.getElementById('modal-descripcion').innerText = descripcion || "Sin descripción disponible.";
+    
+    // Convertimos el precio a formato moneda para que luzca estético
+    const precioNumerico = parseFloat(precio) || 0;
+    document.getElementById('modal-precio').innerText = precioNumerico.toLocaleString('es-AR', { 
+        style: 'currency', 
+        currency: 'ARS', 
+        maximumFractionDigits: 0 
+    });
+    
+    document.getElementById('modal-img').src = imagenUrl;
+    
+    // 2. Vinculamos el botón de compra interna del modal con tu función nativa de carrito
+    const botonCompra = document.getElementById('modal-btn-comprar');
+    botonCompra.onclick = function() {
+        // Ejecuta tu función existente pasándole los parámetros limpios
+        agregarAlCarrito(id, nombre, precioNumerico);
+        
+        // Cierra la ventana flotante de forma automática al sumarlo, si lo deseás
+        document.getElementById('producto-modal').style.display = 'none';
+    };
+
+    // 3. Mostramos la ventana flotante en pantalla
+    document.getElementById('producto-modal').style.display = 'flex';
+}
+
+// Función que detecta clics fuera de la tarjeta del producto flotante para cerrarlo
+function cerrarModalExterno(event) {
+    const modalOverlay = document.getElementById('producto-modal');
+    if (event.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+    }
+}
+
+// ==========================================
+// 2. LÓGICA INTERACTIVA DEL CARRITO
+// ==========================================
+
+function toggleCarritoLateral() {
+    const sidebar = document.getElementById('carrito-lateral');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+        if (sidebar.classList.contains('open')) {
+            renderizarItemsCarrito();
+        }
+    }
+}
+
+function obtenerCarrito() {
+    const carrito = localStorage.getItem('carrito_playjohn');
+    return carrito ? JSON.parse(carrito) : [];
+}
+
+function actualizarGloboCarrito() {
+    const carrito = obtenerCarrito();
+    const totalItems = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
+    document.querySelectorAll('.cart-badge').forEach(badge => {
+        badge.innerText = totalItems;
+        badge.style.display = totalItems > 0 ? 'flex' : 'none';
+    });
+}
+
+function agregarAlCarrito(id, nombre, precio) {
+    let carrito = obtenerCarrito();
+    const productoExistente = carrito.find(item => item.id === id);
+    
+    if (productoExistente) {
+        productoExistente.cantidad += 1;
+    } else {
+        carrito.push({ id: id, nombre: nombre, precio: parseFloat(precio), cantidad: 1 });
+    }
+    
+    localStorage.setItem('carrito_playjohn', JSON.stringify(carrito));
+    actualizarGloboCarrito();
+    renderizarItemsCarrito();
+    
+    const sidebar = document.getElementById('carrito-lateral');
+    if (sidebar) sidebar.classList.add('open');
+}
+// ==========================================
+// 1. CONFIGURACIÓN DE REDES SOCIALES
+// ==========================================
+
+function abrirWppPlayJohn() {
+    const telefono = "5491141701483";
+    const mensaje = "Hola 08 Play John! Quiero hacer una consulta.";
+    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
+    window.open(urlFinal, "_blank");
+}
+
+function abrirIgPlayJohn() {
+    const usuarioIg = "08playjohn";
+    const urlIg = `https://instagram.com{usuarioIg}/`; 
+    window.open(urlIg, "_blank");
+}
+
+// ==========================================
+// NUEVO: LÓGICA DE PREVISUALIZACIÓN DE PRODUCTO FLOTANTE
+// ==========================================
+
+function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
+    // 1. Inyectamos los datos dinámicos que vinieron desde Google Drive al modal
+    document.getElementById('modal-titulo').innerText = nombre;
+    document.getElementById('modal-descripcion').innerText = descripcion || "Sin descripción disponible.";
+    
+    // Formateamos el precio numérico de forma limpia y estética
+    const precioNumerico = parseFloat(precio) || 0;
+    document.getElementById('modal-precio').innerText = precioNumerico.toLocaleString('es-AR', { 
+        style: 'currency', 
+        currency: 'ARS', 
+        maximumFractionDigits: 0 
+    });
+    
+    document.getElementById('modal-img').src = imagenUrl;
+    
+    // 2. Seteamos el botón del modal para que use tu función nativa de agregar al carrito
+    const botonCompraModal = document.getElementById('modal-btn-comprar');
+    botonCompraModal.onclick = function(e) {
+        e.stopPropagation(); // Evita interferencias de eventos
+        agregarAlCarrito(id, nombre, precioNumerico);
+        
+        // Cierra el flotante automáticamente tras añadir para ver el carrito lateral
+        document.getElementById('producto-modal').style.display = 'none';
+    };
+
+    // 3. Desplegamos el modal flotante centrado
+    document.getElementById('producto-modal').style.display = 'flex';
+}
+
+// Condición: Si el usuario hace click afuera de la tarjeta blanca (en el fondo oscuro), vuelve
+function cerrarModalExterno(event) {
+    const modalOverlay = document.getElementById('producto-modal');
+    if (event.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+    }
+}
 
 // ==========================================
 // 2. LÓGICA INTERACTIVA DEL CARRITO
@@ -95,6 +234,9 @@ function eliminarDelCarrito(id) {
     actualizarGloboCarrito();
     renderizarItemsCarrito();
 }
+// ==========================================
+// CONTINUACIÓN DE LÓGICA DEL CARRITO
+// ==========================================
 
 function renderizarItemsCarrito() {
     const contenedorItems = document.getElementById('cart-items-container');
@@ -134,38 +276,31 @@ function renderizarItemsCarrito() {
     contenedorTotal.innerText = totalAcumulado.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
 }
 
-// 1. Esta función ahora solo abre el formulario visual
 function enviarPedidoWhatsApp() {
     const carrito = obtenerCarrito();
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
 
-    // Limpiamos los campos del formulario por si quedaron datos viejos
     document.getElementById('form-nombre').value = '';
     document.getElementById('form-direccion').value = '';
 
-    // Mostramos el formulario flotante con estilo flex para centrarlo
     const modal = document.getElementById('modal-formulario-cliente');
     if (modal) modal.style.display = 'flex';
 }
 
-// 2. Función para cerrar el formulario si se arrepienten
 function cerrarFormularioCliente() {
     const modal = document.getElementById('modal-formulario-cliente');
     if (modal) modal.style.display = 'none';
 }
 
-// 3. Esta función valida los datos juntos y genera el mensaje de WhatsApp definitivo
 function procesarFormularioYEnviar() {
     const nombreInput = document.getElementById('form-nombre').value.trim();
     let direccionInput = document.getElementById('form-direccion').value.trim();
 
-    // Validación: Si el nombre está vacío, frena el envío
     if (!nombreInput) {
         alert("Por favor, ingresá tu Nombre y Apellido para continuar.");
         return;
     }
 
-    // Si la dirección queda vacía, le asignamos el texto por defecto
     if (!direccionInput) {
         direccionInput = "No especificada por el cliente";
     }
@@ -173,42 +308,30 @@ function procesarFormularioYEnviar() {
     const carrito = obtenerCarrito();
     let total = 0;
 
-    // 📝 Armamos el encabezado limpio (No repite el nombre dos veces)
     let mensaje = `*🛒 NUEVO PEDIDO - 08 PLAY JOHN*\n\n`;
     mensaje += `Hola, soy: *${nombreInput}*\n`;
     mensaje += `📌 *Dirección de cliente:* ${direccionInput}\n\n`;
     mensaje += `Quiero coordinar la compra de los siguientes productos:\n\n`;
 
-    // 📦 Recorremos los productos del carrito
     carrito.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
         mensaje += `• *${item.nombre}* (x${item.cantidad}) - ${subtotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
     });
 
-    // 💰 Sumamos el cierre del mensaje, el total y la pregunta de stock
     mensaje += `\n💰 *Total del Pedido:* ${total.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 })}\n`;
     mensaje += `\n¿Tienen disponibilidad de stock para confirmar el pago?`;
 
     const telefono = "5491141701483";
-    
-    // Ocultamos el formulario flotante antes de saltar a WhatsApp
     cerrarFormularioCliente();
     
-    // CORREGIDO: Se eliminaron las llaves fijas y se usó ${telefono} con una barra '/' limpia
-    const urlFinal = `https://wa.me/${telefono}/?text=${encodeURIComponent(mensaje)}`;
-    
+    const urlFinal = `https://wa.me{telefono}/?text=${encodeURIComponent(mensaje)}`;
     window.open(urlFinal, "_blank");
 }
-
-
-
-
-
 // ==========================================
 // 3. CONECTOR DE BASE DE DATOS (GOOGLE DRIVE)
 // ==========================================
-const URL_DRIVE_JSON = "https://script.google.com/macros/s/AKfycbwqPdUzWDOJAtaputLJC2ebosxGuLkrkBxOFQu08PxvhenV3iUEcYYV2hGLdhJl5-Kx/exec";
+const URL_DRIVE_JSON = "https://google.com";
 
 async function cargarProductosDesdeDrive() {
     try {
@@ -244,8 +367,13 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
             const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
             const imagenProd = producto.imagen ? producto.imagen : "https://unsplash.com";
 
+            // Limpiamos comillas simples y dobles para que no rompan la función onclick del HTML
+            const nombreEscapado = producto.nombre.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const descEscapada = descripcionProd.replace(/'/g, "\\'").replace(/"/g, '\\"');
+
+            // NUEVO: La tarjeta completa abre la ventana flotante al hacer clic
             contenedorGrid.innerHTML += `
-                <div class="product-card">
+                <div class="product-card" onclick="abrirProductoFlotante('${prodId}', '${nombreEscapado}', '${descEscapada}', ${precioLimpio}, '${imagenProd}')" style="cursor: pointer;">
                     <div class="product-img-box">
                         <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
                     </div>
@@ -253,7 +381,8 @@ function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
                         <h3 class="product-title">${producto.nombre}</h3>
                         <p class="product-description">${descripcionProd}</p>
                         <p class="product-price">${precioFormateado}</p>
-                        <button class="add-to-cart-btn" onclick="agregarAlCarrito('${prodId}', '${producto.nombre.replace(/'/g, "\\'")}', ${precioLimpio})">
+                        <!-- event.stopPropagation() hace que el botón sume directo al carrito sin abrir el flotante -->
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); agregarAlCarrito('${prodId}', '${nombreEscapado}', ${precioLimpio})">
                             🛒 COMPRAR
                         </button>
                     </div>
@@ -296,10 +425,6 @@ function inicializarBuscadorGlobal() {
         btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
     });
 
-
-    searchButtons.forEach((btn, idx) => {
-        btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
-    });
     searchInputs.forEach(input => {
         input.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); ejecutarBusqueda(e.target.value); } });
     });
@@ -312,6 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarProductosDesdeDrive();
     iniciarRotacionAutomatica();
 });
+
 // ==========================================
 // 5. CONTROL DINÁMICO DEL CARRUSEL DE BANNERS
 // ==========================================
@@ -322,18 +448,15 @@ function mostrarSlide(indice) {
     const imagenes = document.querySelectorAll('.carousel-slide .carousel-img');
     if (imagenes.length === 0) return;
 
-    // Manejo de bucle si se pasa del límite izquierdo o derecho
     if (indice >= imagenes.length) { indiceSlideActual = 0; }
     else if (indice < 0) { indiceSlideActual = imagenes.length - 1; }
     else { indiceSlideActual = indice; }
 
-    // Ocultamos todas las imágenes y solo mostramos la activa
     imagenes.forEach(img => img.style.display = 'none');
     imagenes[indiceSlideActual].style.display = 'block';
 }
 
 function cambiarSlide(direccion) {
-    // Al hacer clic manual, reiniciamos el temporizador automático para que no salte rápido
     clearInterval(intervaloCarrusel);
     mostrarSlide(indiceSlideActual + direccion);
     iniciarRotacionAutomatica();
@@ -342,11 +465,5 @@ function cambiarSlide(direccion) {
 function iniciarRotacionAutomatica() {
     intervaloCarrusel = setInterval(() => {
         mostrarSlide(indiceSlideActual + 1);
-    }, 4000); // Cambia de propaganda automáticamente cada 4 segundos
+    }, 4000);
 }
-
-// Modificamos el inicializador DOMContentLoaded que ya tenés en tu main.js 
-// para que encienda el carrusel apenas cargue la web agregando:
-// iniciarRotacionAutomatica(); justo antes del cierre de la función.
-
-
