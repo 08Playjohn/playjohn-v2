@@ -119,16 +119,14 @@ function abrirIgPlayJohn() {
     window.open(urlIg, "_blank");
 }
 
-// ==========================================
-// NUEVO: LÓGICA DE PREVISUALIZACIÓN DE PRODUCTO FLOTANTE
-// ==========================================
+// VARIABLES GLOBALES PARA EL CARRUSEL DEL MODAL
+let imagenesModalActuales = [];
+let indiceImagenModal = 0;
 
 function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
-    // 1. Inyectamos los datos dinámicos que vinieron desde Google Drive al modal
     document.getElementById('modal-titulo').innerText = nombre;
     document.getElementById('modal-descripcion').innerText = descripcion || "Sin descripción disponible.";
     
-    // Formateamos el precio numérico de forma limpia y estética
     const precioNumerico = parseFloat(precio) || 0;
     document.getElementById('modal-precio').innerText = precioNumerico.toLocaleString('es-AR', { 
         style: 'currency', 
@@ -136,17 +134,65 @@ function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
         maximumFractionDigits: 0 
     });
     
-    document.getElementById('modal-img').src = imagenUrl;
+    // ==========================================
+    // NUEVA LÓGICA: SEPARAR IMÁGENES POR COMA
+    // ==========================================
+    const wrapper = document.getElementById('modal-carousel-wrapper');
+    wrapper.innerHTML = ''; // Limpiamos fotos anteriores
+    indiceImagenModal = 0;   // Reseteamos el contador al primer slide
+
+    // Si tu celda de Drive tiene comas, las divide en una lista de links. Si no, crea una lista de una sola foto.
+    if (imagenUrl.includes(',')) {
+        imagenesModalActuales = imagenUrl.split(',').map(url => url.trim());
+    } else {
+        imagenesModalActuales = [imagenUrl.trim()];
+    }
+
+    // Inyectamos las imágenes en el contenedor del carrusel
+    imagenesModalActuales.forEach((url, index) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = url;
+        imgElement.className = 'modal-imagen';
+        imgElement.onerror = function() { this.src = 'https://unsplash.com'; };
+        // Escondemos todas las fotos menos la primera
+        imgElement.style.display = index === 0 ? 'block' : 'none';
+        wrapper.appendChild(imgElement);
+    });
+
+    // Escondemos las flechas si el producto tiene una sola imagen
+    const flechas = document.querySelectorAll('.modal-carousel-arrow');
+    flechas.forEach(flecha => {
+        flecha.style.display = imagenesModalActuales.length > 1 ? 'flex' : 'none';
+    });
     
-    // 2. Seteamos el botón del modal para que use tu función nativa de agregar al carrito
+    // Botón de compra interno del modal
     const botonCompraModal = document.getElementById('modal-btn-comprar');
     botonCompraModal.onclick = function(e) {
-        e.stopPropagation(); // Evita interferencias de eventos
+        e.stopPropagation();
         agregarAlCarrito(id, nombre, precioNumerico);
-        
-        // Cierra el flotante automáticamente tras añadir para ver el carrito lateral
         document.getElementById('producto-modal').style.display = 'none';
     };
+
+    document.getElementById('producto-modal').style.display = 'flex';
+}
+
+// NUEVA FUNCIÓN: Mover las imágenes del producto flotante hacia adelante o atrás
+function cambiarSlideModal(direccion) {
+    const imagenes = document.querySelectorAll('#modal-carousel-wrapper .modal-imagen');
+    if (imagenes.length <= 1) return;
+
+    // Ocultamos la imagen actual
+    imagenes[indiceImagenModal].style.display = 'none';
+
+    // Calculamos el nuevo índice de foto
+    indiceImagenModal += direccion;
+    if (indiceImagenModal >= imagenes.length) { indiceImagenModal = 0; }
+    if (indiceImagenModal < 0) { indiceImagenModal = imagenes.length - 1; }
+
+    // Mostramos la nueva imagen
+    imagenes[indiceImagenModal].style.display = 'block';
+}
+
 
     // 3. Desplegamos el modal flotante centrado
     document.getElementById('producto-modal').style.display = 'flex';
@@ -349,6 +395,60 @@ async function cargarProductosDesdeDrive() {
 function renderizarProductosEnPantalla(productos, filtroSeleccionado) {
     const contenedorGrid = document.querySelector('.products-grid');
     if (!contenedorGrid) return; 
+
+    contenedorGrid.innerHTML = '';
+    let productosDibujados = 0;
+
+    productos.forEach((producto, index) => {
+        if (!producto || !producto.categoria || !producto.nombre) return;
+
+        const catFormateada = producto.categoria.toLowerCase().trim();
+        const listaConsolas = ['ps2', 'ps3', 'ps4', 'ps5', 'xbox 360', 'nintendo wii', 'consolas'];
+        let categoriaAsignada = listaConsolas.includes(catFormateada) ? "consolas" : "computacion";
+        
+        if (filtroSeleccionado === "todos" || categoriaAsignada === filtroSeleccionado) {
+            const prodId = producto.id ? producto.id : `drive_${index}`;
+            const precioLimpio = producto.precio ? parseFloat(producto.precio) : 0;
+            const precioFormateado = precioLimpio.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+            const descripcionProd = producto.descripcion ? producto.descripcion : "Sin descripción disponible.";
+            
+            // =========================================================================
+            // COLOQUÉ TU REGLA ACÁ ADENTRO (¡Corregida con [0] para que no tire error!):
+            // =========================================================================
+            const imagenProd = producto.imagen ? producto.imagen.split(',')[0].trim() : "https://unsplash.com";
+
+            // Limpiamos comillas simples y dobles para que no rompan la función onclick del HTML
+            const nombreEscapado = producto.nombre.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const descEscapada = descripcionProd.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            
+            // Pasamos el string entero de imágenes (con comas) al modal para que arme el carrusel
+            const imagenCompletaEscapada = producto.imagen ? producto.imagen.replace(/'/g, "\\'").replace(/"/g, '\\"') : "https://unsplash.com";
+
+            // NUEVO: La tarjeta completa abre la ventana flotante al hacer clic
+            contenedorGrid.innerHTML += `
+                <div class="product-card" onclick="abrirProductoFlotante('${prodId}', '${nombreEscapado}', '${descEscapada}', ${precioLimpio}, '${imagenCompletaEscapada}')" style="cursor: pointer;">
+                    <div class="product-img-box">
+                        <img src="${imagenProd}" alt="${producto.nombre}" onerror="this.src='https://unsplash.com'">
+                    </div>
+                    <div class="product-info-block">
+                        <h3 class="product-title">${producto.nombre}</h3>
+                        <p class="product-description">${descripcionProd}</p>
+                        <p class="product-price">${precioFormateado}</p>
+                        <!-- event.stopPropagation() hace que el botón sume directo al carrito sin abrir el flotante -->
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); agregarAlCarrito('${prodId}', '${nombreEscapado}', ${precioLimpio})">
+                            🛒 COMPRAR
+                        </button>
+                    </div>
+                </div>
+            `;
+            productosDibujados++;
+        }
+    });
+
+    if (productosDibujados === 0) {
+        contenedorGrid.innerHTML = `<p style="color: #aaa; grid-column: 1/-1; text-align: center; padding: 40px; font-family: sans-serif;">No hay productos disponibles bajo esta categoría.</p>`;
+    }
+}
 
     contenedorGrid.innerHTML = '';
     let productosDibujados = 0;

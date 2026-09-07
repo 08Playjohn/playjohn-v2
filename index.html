@@ -167,13 +167,23 @@
         </div>
     </div>
 
-    <!-- NUEVO: VENTANA INTERACTIVA MODAL DE PRODUCTO FLOTANTE -->
+        <!-- VENTANA INTERACTIVA MODAL DE PRODUCTO FLOTANTE CON CARRUSEL -->
     <div id="producto-modal" class="modal-overlay" onclick="cerrarModalExterno(event)" style="display: none;">
         <div class="modal-contenido-ampliado">
-            <!-- Columna Izquierda: Imagen del producto -->
+            
+            <!-- Columna Izquierda: NUEVO CARRUSEL INTERNO -->
             <div class="modal-col-izquierda">
-                <img id="modal-img" src="" alt="Imagen del Producto" class="modal-imagen">
+                <div class="modal-carousel-container">
+                    <button type="button" class="modal-carousel-arrow modal-prev" onclick="cambiarSlideModal(-1)">❮</button>
+                    
+                    <div id="modal-carousel-wrapper" class="modal-carousel-wrapper">
+                        <!-- Las imágenes del carrusel se inyectarán acá dinámicamente -->
+                    </div>
+                    
+                    <button type="button" class="modal-carousel-arrow modal-next" onclick="cambiarSlideModal(1)">❯</button>
+                </div>
             </div>
+            
             <!-- Columna Derecha: Detalles -->
             <div class="modal-col-derecha">
                 <h2 id="modal-titulo" class="modal-titulo"></h2>
@@ -190,6 +200,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Vinculación del JavaScript -->
     <script src="main.js"></script>
