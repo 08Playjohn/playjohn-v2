@@ -338,24 +338,59 @@ function filtrarCatalogo(categoria) {
 function inicializarBuscadorGlobal() {
     const searchInputs = document.querySelectorAll('.search-area input');
     const searchButtons = document.querySelectorAll('.search-btn');
+    let debounceTimer;
 
     function ejecutarBusqueda(texto) {
-        const busqueda = texto.trim().toLowerCase();
-        if (busqueda === '' || !window.productosGuardadosGlobal) return;
+        const textoLimpio = texto.trim().toLowerCase();
+        
+        // Si el usuario borró el texto, limpia la búsqueda mostrando todos los productos
+        if (textoLimpio === '') {
+            if (window.productosGuardadosGlobal) {
+                renderizarProductosEnPantalla(window.productosGuardadosGlobal, "todos");
+            }
+            return;
+        }
 
-        const productosEncontrados = window.productosGuardadosGlobal.filter(p => p.nombre.toLowerCase().includes(busqueda));
+        if (!window.productosGuardadosGlobal) return;
+
+        // Divide el texto en palabras sueltas
+        const palabras = textoLimpio.split(/\s+/);
+
+        const productosEncontrados = window.productosGuardadosGlobal.filter(p => {
+            const nombre = (p.nombre || '').toLowerCase();
+            const descripcion = (p.descripcion || '').toLowerCase();
+
+            // Verifica que cada palabra esté en el nombre o en la descripción
+            return palabras.every(palabra => 
+                nombre.includes(palabra) || descripcion.includes(palabra)
+            );
+        });
+
         renderizarProductosEnPantalla(productosEncontrados, "todos");
     }
 
     searchButtons.forEach((btn, idx) => {
-        btn.addEventListener('click', (e) => { e.preventDefault(); ejecutarBusqueda(searchInputs[idx].value); });
+        btn.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            ejecutarBusqueda(searchInputs[idx].value); 
+        });
     });
 
     searchInputs.forEach(input => {
-        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); ejecutarBusqueda(e.target.value); } });
+        // Evita que el formulario se recargue por accidente al presionar Enter
+        input.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') e.preventDefault(); 
+        });
+
+        // Modificado: Búsqueda automática e inteligente en tiempo real
+        input.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                ejecutarBusqueda(e.target.value);
+            }, 200); // Espera 200ms tras la última pulsación de tecla
+        });
     });
 }
-
 // ==========================================
 // 6. CONTROL DINÁMICO DEL CARRUSEL DE BANNERS
 // ==========================================
