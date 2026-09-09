@@ -30,7 +30,7 @@ body {
 .main-header {
     background-color: #0b0b0c;
     padding: 0 4%; 
-    border-bottom: 2px solid #8c00ff;
+    border-bottom: 2px solid #25D366;
     width: 100%;
     position: relative;
     z-index: 9999;
@@ -206,8 +206,8 @@ body {
 .next-arrow { right: 5%; }
 
 .carousel-arrow:hover {
-    background-color: #8c00ff; /* Destello violeta gamer al posar el mouse */
-    border-color: #8c00ff;
+    background-color: #25D366; /* Destello celeste gamer al posar el mouse */
+    border-color: #25D366;
     transform: translateY(-50%) scale(1.1);
 }
 .prev-arrow { left: 5%; }
@@ -257,7 +257,7 @@ body {
 }
 
 .brand-col h3 { color: #00bcff; }
-.terms-col h3 { color: #8c00ff; }
+.terms-col h3 { color: #25D366; }
 .warranty-col h3 { color: #ff0055; }
 
 .footer-col p {
