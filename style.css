@@ -733,7 +733,7 @@ body {
     background-color: #0d0d0d;
     color: #ffffff;
     /* Reducimos el colchón para que se adapte al nuevo tamaño del menú */
-    padding-top: 80px !important; 
+    padding-top: 0px !important; 
 }
 
 
