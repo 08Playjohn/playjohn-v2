@@ -68,6 +68,39 @@ function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
         };
     }
 
+ // ==========================================
+    // NUEVO: CONTROL AUTOMÁTICO DE LA CRUZ DE CIERRE (✕) CORREGIDO
+    // ==========================================
+    const modalOverlay = document.getElementById('producto-modal');
+    
+    if (modalOverlay) {
+        // Buscamos la verdadera caja blanca (el contenedor principal del contenido del modal)
+        // NOTA: Si tu clase de la caja blanca no es .modal-content-box, puedes cambiarla aquí abajo
+        let cajaBlanca = modalOverlay.querySelector('.modal-content-box') || modalOverlay.querySelector('div > div') || modalOverlay.querySelector('div');
+        
+        if (cajaBlanca) {
+            // Forzamos a que la caja blanca sea el punto de anclaje para la esquina superior derecha
+            cajaBlanca.style.position = 'relative';
+
+            // Evitamos duplicar el botón si ya existe
+            let botonCerrar = modalOverlay.querySelector('.modal-close-btn');
+            if (!botonCerrar) {
+                botonCerrar = document.createElement('button');
+                botonCerrar.type = 'button';
+                botonCerrar.className = 'modal-close-btn';
+                botonCerrar.innerHTML = '✕';
+                
+                botonCerrar.onclick = function(e) {
+                    e.stopPropagation();
+                    modalOverlay.style.display = 'none';
+                };
+
+                // Insertamos la cruz directamente en la caja blanca principal
+                cajaBlanca.appendChild(botonCerrar);
+            }
+        }
+    }
+
     document.getElementById('producto-modal').style.display = 'flex';
 }
 
@@ -90,7 +123,6 @@ function cerrarModalExterno(event) {
         modalOverlay.style.display = 'none';
     }
 }
-
 // ==========================================
 // 3. LÓGICA INTERACTIVA DEL CARRITO
 // ==========================================
