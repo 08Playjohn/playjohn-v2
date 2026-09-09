@@ -501,8 +501,8 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 }
 
 .filter-btn:hover {
-    border-color: #8c00ff;
-    box-shadow: 0 0 10px rgba(140, 0, 255, 0.3);
+    border-color: #25d366;
+    box-shadow: 0 0 10px rgba(51, 209, 59, 0.3);
 }
 
 .filter-btn.active {
@@ -546,7 +546,7 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
     width: 380px;
     height: 100vh;
     background-color: #0b0b0c;
-    border-left: 2px solid #8c00ff;
+    border-left: 2px solid #25D366;
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.7);
     z-index: 10000;
     display: flex;
@@ -690,7 +690,7 @@ Usa el código con precaución.Espera 1 minuto a que GitHub Pages procese la sub
 .main-header {
     background-color: #0b0b0c;
     padding: 0 4% !important; /* CORREGIDO: Dejamos el padding vertical en 0 para que no aplaste el logo */
-    border-bottom: 2px solid #8c00ff;
+    border-bottom: 2px solid #25D366;
     width: 100%;
     position: relative; 
     display: flex;
