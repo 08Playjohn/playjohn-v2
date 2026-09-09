@@ -1044,7 +1044,7 @@ body {
 /* Efecto al pasar el mouse (Hover) */
 .modal-close-btn:hover {
     color: #ffffff;
-    background-color: #8c00ff; /* Se rellena de violeta pleno */
+    background-color: #00bcff; /* Se rellena de violeta pleno */
     border-color: #00bcff;      /* Borde cambia al celeste de tu carrito */
     transform: scale(1.1) rotate(90deg); /* Se agranda y gira dinámicamente */
     box-shadow: 0 0 12px rgba(140, 0, 255, 0.6); /* Brillo de neón gamer */
