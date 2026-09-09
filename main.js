@@ -68,6 +68,36 @@ function abrirProductoFlotante(id, nombre, descripcion, precio, imagenUrl) {
         };
     }
 
+    // ==========================================
+    // NUEVO: CONTROL AUTOMÁTICO DE LA CRUZ DE CIERRE (✕)
+    // ==========================================
+    const modalOverlay = document.getElementById('producto-modal');
+    // Buscamos la caja blanca interna (asumiendo que es el primer 'div' hijo)
+    const cajaBlanca = modalOverlay ? modalOverlay.querySelector('div') : null;
+
+    if (cajaBlanca) {
+        // Aseguramos que la caja blanca tenga position relative para anclar la cruz
+        cajaBlanca.style.position = 'relative';
+
+        // Verificamos si la cruz ya existe para no duplicarla
+        let botonCerrar = cajaBlanca.querySelector('.modal-close-btn');
+        if (!botonCerrar) {
+            botonCerrar = document.createElement('button');
+            botonCerrar.type = 'button';
+            botonCerrar.className = 'modal-close-btn';
+            botonCerrar.innerText = '✕';
+            
+            // Asignamos la acción directa de cierre
+            botonCerrar.onclick = function(e) {
+                e.stopPropagation(); // Evita conflictos con clics del fondo
+                modalOverlay.style.display = 'none';
+            };
+
+            // La insertamos arriba de todo adentro de la caja blanca
+            cajaBlanca.insertBefore(botonCerrar, cajaBlanca.firstChild);
+        }
+    }
+
     document.getElementById('producto-modal').style.display = 'flex';
 }
 
@@ -90,7 +120,6 @@ function cerrarModalExterno(event) {
         modalOverlay.style.display = 'none';
     }
 }
-
 // ==========================================
 // 3. LÓGICA INTERACTIVA DEL CARRITO
 // ==========================================
