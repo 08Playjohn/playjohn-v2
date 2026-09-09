@@ -8,20 +8,22 @@
 }
 
 body {
-    background-color: #aaaaaa;    
+    background-color: #0b0b0c; /* Cambiado al fondo negro/oscuro de tu header */
     color: #ffffff;
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 /* ==========================================
-   BARRA SUPERIOR (DESACTIVADA COMPLETAMENTE)
+   BARRA SUPERIOR (ELIMINADA DEL FLUJO)
    ========================================== */
-.top-bar {
+.top-bar, .top-bar-brands, .top-bar-contact {
     display: none !important;
-}
-.top-bar-brands, .top-bar-contact {
-    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
 }
 
 /* ==========================================
